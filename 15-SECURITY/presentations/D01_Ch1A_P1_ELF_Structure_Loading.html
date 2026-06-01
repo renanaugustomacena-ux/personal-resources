@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domain 1 · Ch1A · ELF Structure &amp; Loading</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
+<style>
+:root {
+    --bg: #0A0A1A;
+    --card: #14142A;
+    --elevated: #1C1C34;
+    --cyan: #00D4FF;
+    --green: #00FF88;
+    --red: #FF4444;
+    --yellow: #FFD700;
+    --purple: #BB86FC;
+    --orange: #FF8C00;
+    --teal: #00E5A0;
+    --magenta: #FF0080;
+    --blue: #4488FF;
+    --white: #FFFFFF;
+    --lgray: #CCCCCC;
+    --mgray: #999999;
+    --dgray: #555566;
+    --border: #333350;
+}
+
+.reveal {
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--lgray);
+}
+.reveal .slides {
+    text-align: left;
+}
+.reveal .slides section {
+    padding: 30px 50px;
+}
+.reveal h1, .reveal h2, .reveal h3 {
+    color: var(--white);
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: -0.02em;
+}
+.reveal h1 { font-size: 2.2em; }
+.reveal h2 { font-size: 1.6em; border-bottom: 2px solid var(--cyan); padding-bottom: 8px; display: inline-block; }
+.reveal h3 { font-size: 1.2em; color: var(--cyan); }
+
+/* ── Top Accent Bar ── */
+.slide-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--cyan), var(--purple), var(--magenta));
+}
+
+/* ── Cards ── */
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 8px 0;
+    transition: all 0.3s ease;
+}
+.card:hover {
+    border-color: var(--cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.15);
+}
+.card-accent {
+    border-left: 4px solid var(--cyan);
+}
+.card-accent.green { border-left-color: var(--green); }
+.card-accent.red { border-left-color: var(--red); }
+.card-accent.yellow { border-left-color: var(--yellow); }
+.card-accent.purple { border-left-color: var(--purple); }
+.card-accent.orange { border-left-color: var(--orange); }
+
+/* ── Grid Layouts ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+.grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+.grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; }
+
+/* ── Badges/Pills ── */
+.badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.7em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.badge-cyan { background: rgba(0,212,255,0.2); color: var(--cyan); border: 1px solid var(--cyan); }
+.badge-green { background: rgba(0,255,136,0.2); color: var(--green); border: 1px solid var(--green); }
+.badge-red { background: rgba(255,68,68,0.2); color: var(--red); border: 1px solid var(--red); }
+.badge-yellow { background: rgba(255,215,0,0.2); color: var(--yellow); border: 1px solid var(--yellow); }
+.badge-purple { background: rgba(187,134,252,0.2); color: var(--purple); border: 1px solid var(--purple); }
+.badge-orange { background: rgba(255,140,0,0.2); color: var(--orange); border: 1px solid var(--orange); }
+
+/* ── Severity Labels ── */
+.severity { padding: 2px 10px; border-radius: 4px; font-size: 0.65em; font-weight: 700; text-transform: uppercase; }
+.severity-critical { background: #FF222240; color: #FF4444; border: 1px solid #FF4444; }
+.severity-high { background: #FF660040; color: #FF8800; border: 1px solid #FF8800; }
+.severity-medium { background: #FFCC0040; color: #FFD700; border: 1px solid #FFD700; }
+.severity-low { background: #00CC6640; color: #00FF88; border: 1px solid #00FF88; }
+
+/* ── Code Blocks ── */
+.code-window {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+.code-titlebar {
+    background: var(--elevated);
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid var(--border);
+}
+.code-dot { width: 10px; height: 10px; border-radius: 50%; }
+.code-dot.red { background: var(--red); }
+.code-dot.yellow { background: var(--yellow); }
+.code-dot.green { background: var(--green); }
+.code-window pre {
+    margin: 0;
+    padding: 16px;
+    font-size: 0.65em;
+    line-height: 1.5;
+}
+.code-window code {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+/* ── Tables ── */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.7em;
+}
+.styled-table th {
+    background: var(--elevated);
+    color: var(--cyan);
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid var(--cyan);
+}
+.styled-table td {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+}
+.styled-table tr:nth-child(even) td {
+    background: rgba(20, 20, 42, 0.5);
+}
+.styled-table tr:hover td {
+    background: rgba(0, 212, 255, 0.05);
+}
+
+/* ── Flow Diagrams ── */
+.flow-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+.flow-node {
+    background: var(--card);
+    border: 2px solid var(--cyan);
+    border-radius: 8px;
+    padding: 12px 18px;
+    text-align: center;
+    font-size: 0.75em;
+    font-weight: 600;
+    min-width: 120px;
+    transition: all 0.3s ease;
+}
+.flow-node:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+.flow-arrow {
+    color: var(--cyan);
+    font-size: 1.5em;
+    margin: 0 8px;
+    opacity: 0.7;
+}
+
+/* ── Stats Cards ── */
+.stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+.stat-value {
+    font-size: 2.2em;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+.stat-label {
+    font-size: 0.7em;
+    color: var(--mgray);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* ── Progress Bars ── */
+.progress-bar {
+    background: var(--elevated);
+    border-radius: 4px;
+    height: 8px;
+    margin: 4px 0;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+}
+
+/* ── SVG Animation Keyframes ── */
+@keyframes drawLine {
+    from { stroke-dashoffset: 1000; }
+    to { stroke-dashoffset: 0; }
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+@keyframes glow {
+    0%, 100% { filter: drop-shadow(0 0 3px currentColor); }
+    50% { filter: drop-shadow(0 0 10px currentColor); }
+}
+@keyframes flowRight {
+    0% { transform: translateX(-10px); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateX(10px); opacity: 0; }
+}
+@keyframes rotateIn {
+    from { transform: rotate(-180deg) scale(0); opacity: 0; }
+    to { transform: rotate(0) scale(1); opacity: 1; }
+}
+@keyframes typewriter {
+    from { width: 0; }
+    to { width: 100%; }
+}
+@keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+}
+@keyframes dataFlow {
+    0% { stroke-dashoffset: 20; }
+    100% { stroke-dashoffset: 0; }
+}
+@keyframes nodeAppear {
+    0% { r: 0; opacity: 0; }
+    100% { r: 6; opacity: 1; }
+}
+
+.svg-animated line, .svg-animated path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawLine 2s ease forwards;
+}
+.svg-animated circle {
+    animation: nodeAppear 0.5s ease forwards;
+}
+.svg-animated .flow-particle {
+    animation: flowRight 2s ease-in-out infinite;
+}
+.svg-animated .pulse-node {
+    animation: pulse 2s ease-in-out infinite;
+}
+.svg-animated .glow-element {
+    animation: glow 3s ease-in-out infinite;
+}
+
+/* ── Animated Entry for fragments ── */
+.reveal .fragment.fade-in-then-semi-out {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+/* ── Comparison Layout ── */
+.vs-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: start;
+}
+.vs-badge {
+    background: var(--elevated);
+    border: 2px solid var(--yellow);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--yellow);
+    align-self: center;
+}
+
+/* ── Timeline ── */
+.timeline {
+    position: relative;
+    padding: 10px 0;
+}
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+}
+.timeline-item {
+    display: flex;
+    margin: 8px 0;
+    font-size: 0.7em;
+}
+.timeline-item:nth-child(odd) {
+    flex-direction: row;
+    padding-right: 52%;
+    text-align: right;
+}
+.timeline-item:nth-child(even) {
+    flex-direction: row-reverse;
+    padding-left: 52%;
+}
+.timeline-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    position: absolute;
+    left: calc(50% - 5px);
+}
+
+/* ── Layer Stack ── */
+.layer-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.layer {
+    padding: 12px 20px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.8em;
+    transition: all 0.3s ease;
+}
+.layer:hover {
+    transform: scaleX(1.02);
+}
+
+/* ── Risk Matrix ── */
+.risk-matrix {
+    display: grid;
+    gap: 2px;
+    font-size: 0.6em;
+}
+.risk-cell {
+    padding: 8px;
+    text-align: center;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+/* ── Scrolling animation for background ── */
+.cyber-bg {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: -1;
+}
+.cyber-bg::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 48px,
+        rgba(0,212,255,0.03) 48px,
+        rgba(0,212,255,0.03) 50px
+    );
+}
+
+
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section class="slide-header" >
+
+<div class="cyber-bg"></div>
+<div style="text-align:center;padding-top:80px">
+    <span class="badge badge-cyan">DOMAIN 1 — BINARY FORMATS</span>
+    <h1 style="margin-top:30px;background:linear-gradient(135deg,#FFFFFF,#00D4FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:2.4em">ELF Foundations &amp;
+Dynamic Linking Core</h1>
+    <div style="width:200px;height:2px;background:linear-gradient(90deg,transparent,#00D4FF,transparent);margin:20px auto"></div>
+    <p style="color:#CCCCCC;font-size:0.9em">File Header · Program Headers · Segments · Sections · GOT/PLT · Lazy Binding</p>
+    <p style="color:#555566;font-size:0.6em;margin-top:30px">Chapter 1A · Part 1 of 2</p>
+</div>
+</section>
+<section class="slide-header" >
+
+<h2>AGENDA</h2>
+<div class="grid-2" style="margin-top:15px;font-size:0.75em">
+    <div><div class="card" style="border-left:3px solid #00D4FF;padding:8px 14px;margin:5px 0"><span style="color:#00D4FF;font-weight:700;margin-right:10px">01</span>ELF Dual-View Architecture</div>
+<div class="card" style="border-left:3px solid #00FF88;padding:8px 14px;margin:5px 0"><span style="color:#00FF88;font-weight:700;margin-right:10px">02</span>ELF File Header (Elf64_Ehdr)</div>
+<div class="card" style="border-left:3px solid #FFD700;padding:8px 14px;margin:5px 0"><span style="color:#FFD700;font-weight:700;margin-right:10px">03</span>Program Headers &amp; Segment Types</div>
+<div class="card" style="border-left:3px solid #FF4444;padding:8px 14px;margin:5px 0"><span style="color:#FF4444;font-weight:700;margin-right:10px">04</span>Section Headers &amp; sh_flags</div>
+<div class="card" style="border-left:3px solid #BB86FC;padding:8px 14px;margin:5px 0"><span style="color:#BB86FC;font-weight:700;margin-right:10px">05</span>Kernel→Loader Handoff &amp; auxv</div>
+<div class="card" style="border-left:3px solid #FF8C00;padding:8px 14px;margin:5px 0"><span style="color:#FF8C00;font-weight:700;margin-right:10px">06</span>Dynamic Linker Boot Sequence</div>
+<div class="card" style="border-left:3px solid #00E5A0;padding:8px 14px;margin:5px 0"><span style="color:#00E5A0;font-weight:700;margin-right:10px">07</span>.dynamic Section Tags</div>
+<div class="card" style="border-left:3px solid #FF0080;padding:8px 14px;margin:5px 0"><span style="color:#FF0080;font-weight:700;margin-right:10px">08</span>Symbol Tables &amp; Visibility</div>
+</div>
+    <div><div class="card" style="border-left:3px solid #4488FF;padding:8px 14px;margin:5px 0"><span style="color:#4488FF;font-weight:700;margin-right:10px">09</span>SysV .hash vs GNU .gnu.hash</div>
+<div class="card" style="border-left:3px solid #FF6BB5;padding:8px 14px;margin:5px 0"><span style="color:#FF6BB5;font-weight:700;margin-right:10px">10</span>Relocation Types (x86_64)</div>
+<div class="card" style="border-left:3px solid #6644FF;padding:8px 14px;margin:5px 0"><span style="color:#6644FF;font-weight:700;margin-right:10px">11</span>.got vs .got.plt</div>
+<div class="card" style="border-left:3px solid #00D4FF;padding:8px 14px;margin:5px 0"><span style="color:#00D4FF;font-weight:700;margin-right:10px">12</span>PLT &amp; Lazy Binding Flow</div>
+<div class="card" style="border-left:3px solid #00FF88;padding:8px 14px;margin:5px 0"><span style="color:#00FF88;font-weight:700;margin-right:10px">13</span>Symbol Resolution Order</div>
+<div class="card" style="border-left:3px solid #FFD700;padding:8px 14px;margin:5px 0"><span style="color:#FFD700;font-weight:700;margin-right:10px">14</span>Full RELRO vs Partial</div>
+<div class="card" style="border-left:3px solid #FF4444;padding:8px 14px;margin:5px 0"><span style="color:#FF4444;font-weight:700;margin-right:10px">15</span>Complete Load Sequence</div>
+<div class="card" style="border-left:3px solid #BB86FC;padding:8px 14px;margin:5px 0"><span style="color:#BB86FC;font-weight:700;margin-right:10px">16</span>Detection &amp; Forensics</div>
+</div>
+</div>
+</section>
+<section class="slide-header" >
+<h2>ELF Format at a Glance</h2>
+<div class="grid-4" style="margin-top:20px"><div class="stat-card" style="border-top:3px solid #00D4FF">
+    <div class="stat-value" style="color:#00D4FF">64 B</div>
+    <div class="stat-label">Header Size</div>
+</div>
+<div class="stat-card" style="border-top:3px solid #00FF88">
+    <div class="stat-value" style="color:#00FF88">56 B</div>
+    <div class="stat-label">Phdr Entry</div>
+</div>
+<div class="stat-card" style="border-top:3px solid #FFD700">
+    <div class="stat-value" style="color:#FFD700">64 B</div>
+    <div class="stat-label">Shdr Entry</div>
+</div>
+<div class="stat-card" style="border-top:3px solid #BB86FC">
+    <div class="stat-value" style="color:#BB86FC">24 B</div>
+    <div class="stat-label">Symbol Entry</div>
+</div>
+</div>
+</section>
+<section class="" >
+
+<div style="text-align:center;padding-top:120px">
+    <div style="font-size:3em;color:#BB86FC;font-weight:700;opacity:0.3;margin-bottom:-20px">1</div>
+    <h2 style="border-bottom:3px solid #BB86FC;display:inline-block;padding-bottom:10px">The Dual-View Architecture</h2>
+    <p style="color:#CCCCCC;font-size:0.85em;max-width:600px;margin:15px auto 0">Same bytes, two descriptions</p>
+</div>
+</section>
+<section class="slide-header" >
+
+<h2>Sections vs Segments</h2>
+<div class="vs-container" style="margin-top:15px">
+    <div class="card" style="border-top:3px solid #FF4444">
+        <h3 style="color:#FF4444;margin-top:0">Section Headers (Linker View)</h3>
+        <div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ What ld needs to combine .o files</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Can be stripped — binary still runs</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Symbol names, debug info, exception tables</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ sh_flags: SHF_ALLOC, SHF_WRITE, SHF_EXECINSTR</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Not consulted by kernel at all</div>
+    </div>
+    <div class="vs-badge">VS</div>
+    <div class="card" style="border-top:3px solid #00FF88">
+        <h3 style="color:#00FF88;margin-top:0">Program Headers (Loader View)</h3>
+        <div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ What kernel/ld.so needs to mmap &amp; execute</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Cannot be removed — binary won&#x27;t load</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Memory regions with R/W/X permissions</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ p_flags: PF_R, PF_W, PF_X</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ The ONLY thing kernel reads</div>
+    </div>
+</div>
+</section>
+<section class="slide-header" >
+<h2>ELF Dual-View Mental Model</h2>
+<svg class="svg-animated" viewBox="0 0 900 377" style="width:90%;margin:10px auto;display:block">
+  <g style="animation:fadeInUp 0.6s ease 0.0s both">
+    <rect x="0.0" y="10" width="450.0" height="45" rx="6"
+          fill="#14142A" stroke="#00D4FF" stroke-width="1.5"/>
+    <text x="225.0" y="36.5" text-anchor="middle"
+          fill="#00D4FF" font-size="12" font-weight="600">ELF File Header (Elf64_Ehdr)</text>
+    <text x="470.0" y="36.5" text-anchor="start"
+          fill="#CCCCCC" font-size="10">e_phoff → segments, e_shoff → sections</text>
+  </g>
+  <g style="animation:fadeInUp 0.6s ease 0.2s both">
+    <rect x="7.5" y="61" width="435.0" height="45" rx="6"
+          fill="#14142A" stroke="#00FF88" stroke-width="1.5"/>
+    <text x="225.0" y="87.5" text-anchor="middle"
+          fill="#00FF88" font-size="12" font-weight="600">Program Header Table</text>
+    <text x="462.5" y="87.5" text-anchor="start"
+          fill="#CCCCCC" font-size="10">Kernel reads ONLY this for execution</text>
+  </g>
+  <g style="animation:fadeInUp 0.6s ease 0.4s both">
+    <rect x="15.0" y="112" width="420.0" height="45" rx="6"
+          fill="#14142A" stroke="#4488FF" stroke-width="1.5"/>
+    <text x="225.0" y="138.5" text-anchor="middle"
+          fill="#4488FF" font-size="12" font-weight="600">PT_LOAD #1 (R-X)</text>
+    <text x="455.0" y="138.5" text-anchor="start"
+          fill="#CCCCCC" font-size="10">.text, .plt, .init — executable code</text>
+  </g>
+  <g style="animation:fadeInUp 0.6s ease 0.6000000000000001s both">
+    <rect x="22.5" y="163" width="405.0" height="45" rx="6"
+          fill="#14142A" stroke="#00E5A0" stroke-width="1.5"/>
+    <text x="225.0" y="189.5" text-anchor="middle"
+          fill="#00E5A0" font-size="12" font-weight="600">PT_LOAD #2 (R--)</text>
+    <text x="447.5" y="189.5" text-anchor="start"
+          fill="#CCCCCC" font-size="10">.rodata, .eh_frame — read-only data</text>
+  </g>
+  <g style="animation:fadeInUp 0.6s ease 0.8s both">
+    <rect x="30.0" y="214" width="390.0" height="45" rx="6"
+          fill="#14142A" stroke="#FFD700" stroke-width="1.5"/>
+    <text x="225.0" y="240.5" text-anchor="middle"
+          fill="#FFD700" font-size="12" font-weight="600">PT_LOAD #3 (RW→R-- RELRO)</text>
+    <text x="440.0" y="240.5" text-anchor="start"
+          fill="#CCCCCC" font-size="10">.dynamic, .got — RELRO-protected</text>
+  </g>
+  <g style="animation:fadeInUp 0.6s ease 1.0s both">
+    <rect x="37.5" y="265" width="375.0" height="45" rx="6"
+          fill="#14142A" stroke="#FF4444" stroke-width="1.5"/>
+    <text x="225.0" y="291.5" text-anchor="middle"
+          fill="#FF4444" font-size="12" font-weight="600">PT_LOAD #4 (RW-)</text>
+    <text x="432.5" y="291.5" text-anchor="start"
+          fill="#CCCCCC" font-size="10">.data, .got.plt, .bss — writable data</text>
+  </g>
+  <g style="animation:fadeInUp 0.6s ease 1.2000000000000002s both">
+    <rect x="45.0" y="316" width="360.0" height="45" rx="6"
+          fill="#14142A" stroke="#BB86FC" stroke-width="1.5"/>
+    <text x="225.0" y="342.5" text-anchor="middle"
+          fill="#BB86FC" font-size="12" font-weight="600">Section Header Table (optional)</text>
+    <text x="425.0" y="342.5" text-anchor="start"
+          fill="#CCCCCC" font-size="10">Analysis-only, strippable</text>
+  </g>
+</svg>
+</section>
+<section class="slide-header" >
+<h2>Security Implications</h2>
+<div style="margin:6px 0;display:flex;align-items:center;gap:12px"><span class="severity severity-critical">critical</span><span style="font-size:0.75em">Section headers can be stripped/forged — tools relying only on sections are fooled</span></div>
+<div style="margin:6px 0;display:flex;align-items:center;gap:12px"><span class="severity severity-high">high</span><span style="font-size:0.75em">YARA rules matching section names miss binaries with stripped tables</span></div>
+<div style="margin:6px 0;display:flex;align-items:center;gap:12px"><span class="severity severity-high">high</span><span style="font-size:0.75em">Packers routinely zero e_shoff to frustrate disassemblers</span></div>
+<div style="margin:6px 0;display:flex;align-items:center;gap:12px"><span class="severity severity-medium">medium</span><span style="font-size:0.75em">Section names can lie: .text can contain writable data</span></div>
+<div style="margin:6px 0;display:flex;align-items:center;gap:12px"><span class="severity severity-info">info</span><span style="font-size:0.75em">Always validate program headers first, sections second</span></div>
+
+</section>
+<section class="" >
+
+<div style="text-align:center;padding-top:120px">
+    <div style="font-size:3em;color:#BB86FC;font-weight:700;opacity:0.3;margin-bottom:-20px">2</div>
+    <h2 style="border-bottom:3px solid #BB86FC;display:inline-block;padding-bottom:10px">The ELF File Header</h2>
+    <p style="color:#CCCCCC;font-size:0.85em;max-width:600px;margin:15px auto 0">Elf64_Ehdr — 64 bytes</p>
+</div>
+</section>
+<section class="slide-header" >
+
+<h2>Elf64_Ehdr Structure</h2>
+<div class="code-window">
+    <div class="code-titlebar">
+        <div class="code-dot red"></div>
+        <div class="code-dot yellow"></div>
+        <div class="code-dot green"></div>
+        <span style="margin-left:10px;font-size:0.65em;color:#999999">c</span>
+    </div>
+    <pre><code class="language-c">typedef struct {
+    unsigned char e_ident[16];   // Magic + class + endian
+    Elf64_Half    e_type;        // ET_REL | ET_EXEC | ET_DYN | ET_CORE
+    Elf64_Half    e_machine;     // EM_X86_64 | EM_AARCH64
+    Elf64_Word    e_version;     // EV_CURRENT
+    Elf64_Addr    e_entry;       // Entry point VA
+    Elf64_Off     e_phoff;       // Phdr table offset
+    Elf64_Off     e_shoff;       // Shdr table offset
+    Elf64_Word    e_flags;       // Processor-specific
+    Elf64_Half    e_ehsize;      // This header: 64
+    Elf64_Half    e_phentsize;   // Phdr entry: 56
+    Elf64_Half    e_phnum;       // Number of phdrs
+    Elf64_Half    e_shentsize;   // Shdr entry: 64
+    Elf64_Half    e_shnum;       // Number of shdrs
+    Elf64_Half    e_shstrndx;   // Section name strtab
+} Elf64_Ehdr;</code></pre>
+</div>
+<div style="margin-top:10px;font-size:0.65em;color:#999999"><div>→ e_type ET_DYN: ambiguous — both .so and PIE are ET_DYN</div><div>→ e_entry for PIE: offset from load base, not absolute VA</div></div>
+</section>
+<section class="slide-header" >
+
+<h2>e_ident[16] Breakdown</h2>
+<table class="styled-table">
+    <thead><tr><th>Offset</th><th>Name</th><th>Value</th><th>Purpose</th></tr></thead>
+    <tbody><tr><td>0-3</td><td>EI_MAG</td><td>0x7F ELF</td><td>Magic number</td></tr>
+<tr><td>4</td><td>EI_CLASS</td><td>1=32, 2=64</td><td>Address size</td></tr>
+<tr><td>5</td><td>EI_DATA</td><td>1=LSB, 2=MSB</td><td>Endianness</td></tr>
+<tr><td>7</td><td>EI_OSABI</td><td>0=NONE, 3=GNU</td><td>Target OS/ABI</td></tr>
+<tr><td>9-15</td><td>EI_PAD</td><td>Should be 0</td><td>Can hide data!</td></tr>
+</tbody>
+</table>
+</section>
+<section class="slide-header" >
+<h2>ELF Header Anomaly Signals</h2>
+<div style="display:flex;gap:15px;margin:6px 0;align-items:baseline">
+    <span class="badge" style="background:rgba(0,0,0,0.3);color:#FF4444;border:1px solid #FF4444;min-width:120px;text-align:center">e_shoff = 0</span>
+    <span style="font-size:0.72em;color:#CCCCCC">No sections — strong anomaly signal</span>
+</div>
+<div style="display:flex;gap:15px;margin:6px 0;align-items:baseline">
+    <span class="badge" style="background:rgba(0,0,0,0.3);color:#FF8C00;border:1px solid #FF8C00;min-width:120px;text-align:center">e_phentsize ≠ 56</span>
+    <span style="font-size:0.72em;color:#CCCCCC">Invalid phdr size for ELF64</span>
+</div>
+<div style="display:flex;gap:15px;margin:6px 0;align-items:baseline">
+    <span class="badge" style="background:rgba(0,0,0,0.3);color:#FFD700;border:1px solid #FFD700;min-width:120px;text-align:center">e_ident pad ≠ 0</span>
+    <span style="font-size:0.72em;color:#CCCCCC">Data smuggling in unused bytes</span>
+</div>
+<div style="display:flex;gap:15px;margin:6px 0;align-items:baseline">
+    <span class="badge" style="background:rgba(0,0,0,0.3);color:#BB86FC;border:1px solid #BB86FC;min-width:120px;text-align:center">e_entry → non-X</span>
+    <span style="font-size:0.72em;color:#CCCCCC">Post-link entry point modification</span>
+</div>
+
+</section>
+<section class="" >
+
+<div style="text-align:center;padding-top:120px">
+    <div style="font-size:3em;color:#BB86FC;font-weight:700;opacity:0.3;margin-bottom:-20px">3</div>
+    <h2 style="border-bottom:3px solid #BB86FC;display:inline-block;padding-bottom:10px">Program Headers</h2>
+    <p style="color:#CCCCCC;font-size:0.85em;max-width:600px;margin:15px auto 0">Elf64_Phdr — segment loading</p>
+</div>
+</section>
+<section class="slide-header" >
+
+<h2>Program Header Types</h2>
+<table class="styled-table">
+    <thead><tr><th>Type</th><th>Value</th><th>Purpose</th><th>Security</th></tr></thead>
+    <tbody><tr><td>PT_LOAD</td><td>1</td><td>Map file region</td><td>W+X = anomalous</td></tr>
+<tr><td>PT_DYNAMIC</td><td>2</td><td>.dynamic array</td><td>Required for dynamic linking</td></tr>
+<tr><td>PT_INTERP</td><td>3</td><td>Path to ld.so</td><td>Absent = static (no LD_PRELOAD)</td></tr>
+<tr><td>PT_NOTE</td><td>4</td><td>Build ID, CET</td><td>Infection target (→PT_LOAD)</td></tr>
+<tr><td>PT_GNU_STACK</td><td>0x6474e551</td><td>Stack perms</td><td>PF_X = exec stack!</td></tr>
+<tr><td>PT_GNU_RELRO</td><td>0x6474e552</td><td>RELRO region</td><td>mprotect&#x27;d after reloc</td></tr>
+</tbody>
+</table>
+</section>
+<section class="" >
+
+<div style="text-align:center;padding-top:120px">
+    <div style="font-size:3em;color:#BB86FC;font-weight:700;opacity:0.3;margin-bottom:-20px">5</div>
+    <h2 style="border-bottom:3px solid #BB86FC;display:inline-block;padding-bottom:10px">Kernel → Loader Handoff</h2>
+    <p style="color:#CCCCCC;font-size:0.85em;max-width:600px;margin:15px auto 0">The auxiliary vector bridge</p>
+</div>
+</section>
+<section class="slide-header" >
+<h2>Kernel Loading Sequence</h2>
+<svg class="svg-animated" viewBox="0 0 1100 200" style="width:100%;max-height:200px;margin:15px 0">
+  <g style="animation-delay:0.0s">
+    <rect x="20" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#00D4FF" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.0s both"/>
+    <text x="85" y="85" text-anchor="middle"
+          fill="#00D4FF" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.1s both">execve()</text>
+  </g>
+  <line x1="155" y1="80" x2="177" y2="80"
+        stroke="#00D4FF" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.2s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.3s">
+    <rect x="181" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#00FF88" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.3s both"/>
+    <text x="246" y="85" text-anchor="middle"
+          fill="#00FF88" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.4s both">Parse ELF</text>
+  </g>
+  <line x1="316" y1="80" x2="338" y2="80"
+        stroke="#00FF88" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.5s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.6s">
+    <rect x="342" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#FFD700" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.6s both"/>
+    <text x="407" y="85" text-anchor="middle"
+          fill="#FFD700" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.7s both">mmap LOAD</text>
+  </g>
+  <line x1="477" y1="80" x2="499" y2="80"
+        stroke="#FFD700" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.8s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.8999999999999999s">
+    <rect x="503" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#FF4444" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.8999999999999999s both"/>
+    <text x="568" y="85" text-anchor="middle"
+          fill="#FF4444" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.9999999999999999s both">ASLR base</text>
+  </g>
+  <line x1="638" y1="80" x2="660" y2="80"
+        stroke="#FF4444" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 1.0999999999999999s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:1.2s">
+    <rect x="664" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#BB86FC" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 1.2s both"/>
+    <text x="729" y="85" text-anchor="middle"
+          fill="#BB86FC" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 1.3s both">Load ld.so</text>
+  </g>
+  <line x1="799" y1="80" x2="821" y2="80"
+        stroke="#BB86FC" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 1.4s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:1.5s">
+    <rect x="825" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#FF8C00" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 1.5s both"/>
+    <text x="890" y="85" text-anchor="middle"
+          fill="#FF8C00" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 1.6s both">Build auxv</text>
+  </g>
+  <line x1="960" y1="80" x2="982" y2="80"
+        stroke="#FF8C00" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 1.7s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:1.7999999999999998s">
+    <rect x="986" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#00E5A0" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 1.7999999999999998s both"/>
+    <text x="1051" y="85" text-anchor="middle"
+          fill="#00E5A0" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 1.9s both">jmp ld.so</text>
+  </g>
+  <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#00D4FF"/>
+  </marker></defs>
+</svg>
+</section>
+<section class="slide-header" >
+
+<h2>Auxiliary Vector (auxv)</h2>
+<table class="styled-table">
+    <thead><tr><th>Tag</th><th>Purpose</th><th>Security Impact</th></tr></thead>
+    <tbody><tr><td>AT_PHDR</td><td>Program header table VA</td><td>ld.so finds PT_DYNAMIC</td></tr>
+<tr><td>AT_RANDOM</td><td>16 bytes kernel random</td><td>Seeds stack canary</td></tr>
+<tr><td>AT_SECURE</td><td>1 if setuid/setgid</td><td>Disables LD_PRELOAD!</td></tr>
+<tr><td>AT_SYSINFO_EHDR</td><td>vDSO address</td><td>Fast syscalls</td></tr>
+<tr><td>AT_BASE</td><td>ld.so load base</td><td>Self-relocation target</td></tr>
+</tbody>
+</table>
+</section>
+<section class="slide-header" >
+<h2>AT_SECURE — Setuid Safety</h2>
+<div class="card card-accent" style="border-left-color:#FF4444;padding:10px 16px;margin:5px 0">
+    <strong style="color:#FF4444;font-size:0.8em">What It Does</strong>
+    <div style="font-size:0.72em;color:#CCCCCC;margin-top:4px">ld.so ignores LD_PRELOAD, LD_LIBRARY_PATH, LD_AUDIT when AT_SECURE=1</div>
+</div>
+<div class="card card-accent" style="border-left-color:#FFD700;padding:10px 16px;margin:5px 0">
+    <strong style="color:#FFD700;font-size:0.8em">When Set</strong>
+    <div style="font-size:0.72em;color:#CCCCCC;margin-top:4px">Kernel sets for setuid, setgid, file-capability binaries</div>
+</div>
+<div class="card card-accent" style="border-left-color:#00FF88;padding:10px 16px;margin:5px 0">
+    <strong style="color:#00FF88;font-size:0.8em">Why Critical</strong>
+    <div style="font-size:0.72em;color:#CCCCCC;margin-top:4px">Without it, any user could LD_PRELOAD into setuid binaries for root</div>
+</div>
+<div class="card card-accent" style="border-left-color:#BB86FC;padding:10px 16px;margin:5px 0">
+    <strong style="color:#BB86FC;font-size:0.8em">CVE-2010-3856</strong>
+    <div style="font-size:0.72em;color:#CCCCCC;margin-top:4px">$ORIGIN expansion bypassed AT_SECURE in older glibc</div>
+</div>
+
+</section>
+<section class="" >
+
+<div style="text-align:center;padding-top:120px">
+    <div style="font-size:3em;color:#BB86FC;font-weight:700;opacity:0.3;margin-bottom:-20px">6</div>
+    <h2 style="border-bottom:3px solid #BB86FC;display:inline-block;padding-bottom:10px">The Dynamic Linker</h2>
+    <p style="color:#CCCCCC;font-size:0.85em;max-width:600px;margin:15px auto 0">ld-linux.so boot sequence</p>
+</div>
+</section>
+<section class="slide-header" >
+<h2>Library Search Path Order</h2><h3>LD_LIBRARY_PATH ignored when AT_SECURE=1</h3>
+<svg class="svg-animated" viewBox="0 0 1100 200" style="width:100%;max-height:200px;margin:15px 0">
+  <g style="animation-delay:0.0s">
+    <rect x="20" y="55" width="150" height="50"
+          rx="8" fill="#14142A" stroke="#00D4FF" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.0s both"/>
+    <text x="95" y="85" text-anchor="middle"
+          fill="#00D4FF" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.1s both">DT_RPATH</text>
+  </g>
+  <line x1="174" y1="80" x2="196" y2="80"
+        stroke="#00D4FF" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.2s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.3s">
+    <rect x="200" y="55" width="150" height="50"
+          rx="8" fill="#14142A" stroke="#00FF88" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.3s both"/>
+    <text x="275" y="85" text-anchor="middle"
+          fill="#00FF88" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.4s both">LD_LIBRARY_PATH</text>
+  </g>
+  <line x1="354" y1="80" x2="376" y2="80"
+        stroke="#00FF88" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.5s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.6s">
+    <rect x="380" y="55" width="150" height="50"
+          rx="8" fill="#14142A" stroke="#FFD700" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.6s both"/>
+    <text x="455" y="85" text-anchor="middle"
+          fill="#FFD700" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.7s both">DT_RUNPATH</text>
+  </g>
+  <line x1="534" y1="80" x2="556" y2="80"
+        stroke="#FFD700" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.8s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.8999999999999999s">
+    <rect x="560" y="55" width="150" height="50"
+          rx="8" fill="#14142A" stroke="#FF4444" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.8999999999999999s both"/>
+    <text x="635" y="85" text-anchor="middle"
+          fill="#FF4444" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.9999999999999999s both">ld.so.cache</text>
+  </g>
+  <line x1="714" y1="80" x2="736" y2="80"
+        stroke="#FF4444" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 1.0999999999999999s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:1.2s">
+    <rect x="740" y="55" width="150" height="50"
+          rx="8" fill="#14142A" stroke="#BB86FC" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 1.2s both"/>
+    <text x="815" y="85" text-anchor="middle"
+          fill="#BB86FC" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 1.3s both">/lib, /usr/lib</text>
+  </g>
+  <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#00D4FF"/>
+  </marker></defs>
+</svg>
+</section>
+<section class="" >
+
+<div style="text-align:center;padding-top:120px">
+    <div style="font-size:3em;color:#BB86FC;font-weight:700;opacity:0.3;margin-bottom:-20px">8</div>
+    <h2 style="border-bottom:3px solid #BB86FC;display:inline-block;padding-bottom:10px">Symbol Tables</h2>
+    <p style="color:#CCCCCC;font-size:0.85em;max-width:600px;margin:15px auto 0">.dynsym / .dynstr</p>
+</div>
+</section>
+<section class="slide-header" >
+<h2>Symbol Binding (STB_*)</h2>
+<div style="display:flex;gap:15px;margin:6px 0;align-items:baseline">
+    <span class="badge" style="background:rgba(0,0,0,0.3);color:#00FF88;border:1px solid #00FF88;min-width:120px;text-align:center">STB_LOCAL</span>
+    <span style="font-size:0.72em;color:#CCCCCC">Not visible outside object</span>
+</div>
+<div style="display:flex;gap:15px;margin:6px 0;align-items:baseline">
+    <span class="badge" style="background:rgba(0,0,0,0.3);color:#00D4FF;border:1px solid #00D4FF;min-width:120px;text-align:center">STB_GLOBAL</span>
+    <span style="font-size:0.72em;color:#CCCCCC">Visible to all, must be unique</span>
+</div>
+<div style="display:flex;gap:15px;margin:6px 0;align-items:baseline">
+    <span class="badge" style="background:rgba(0,0,0,0.3);color:#FFD700;border:1px solid #FFD700;min-width:120px;text-align:center">STB_WEAK</span>
+    <span style="font-size:0.72em;color:#CCCCCC">Overridable, 0 if unresolved</span>
+</div>
+<div style="display:flex;gap:15px;margin:6px 0;align-items:baseline">
+    <span class="badge" style="background:rgba(0,0,0,0.3);color:#BB86FC;border:1px solid #BB86FC;min-width:120px;text-align:center">STB_GNU_UNIQUE</span>
+    <span style="font-size:0.72em;color:#CCCCCC">C++ template dedup</span>
+</div>
+
+</section>
+<section class="slide-header" >
+
+<h2>Symbol Visibility</h2>
+<table class="styled-table">
+    <thead><tr><th>Visibility</th><th>Exported?</th><th>Interposable?</th><th>Use Case</th></tr></thead>
+    <tbody><tr><td>STV_DEFAULT</td><td>Yes</td><td>Yes</td><td>Standard (LD_PRELOAD can hook)</td></tr>
+<tr><td>STV_HIDDEN</td><td>No</td><td>N/A</td><td>Library internal</td></tr>
+<tr><td>STV_PROTECTED</td><td>Yes</td><td>No</td><td>Immune to LD_PRELOAD</td></tr>
+</tbody>
+</table>
+</section>
+<section class="" >
+
+<div style="text-align:center;padding-top:120px">
+    <div style="font-size:3em;color:#BB86FC;font-weight:700;opacity:0.3;margin-bottom:-20px">9</div>
+    <h2 style="border-bottom:3px solid #BB86FC;display:inline-block;padding-bottom:10px">Hash Tables</h2>
+    <p style="color:#CCCCCC;font-size:0.85em;max-width:600px;margin:15px auto 0">SysV vs GNU</p>
+</div>
+</section>
+<section class="slide-header" >
+
+<h2>SysV .hash vs GNU .gnu.hash</h2>
+<div class="vs-container" style="margin-top:15px">
+    <div class="card" style="border-top:3px solid #FF4444">
+        <h3 style="color:#FF4444;margin-top:0">SysV .hash</h3>
+        <div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Every probe touches symbol table</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Missing symbol → walk chain to end</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ No early termination</div>
+    </div>
+    <div class="vs-badge">VS</div>
+    <div class="card" style="border-top:3px solid #00FF88">
+        <h3 style="color:#00FF88;margin-top:0">GNU .gnu.hash</h3>
+        <div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Bloom filter eliminates absent symbols</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Chain stores hash values, not indices</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ O(1) for absent symbols</div>
+    </div>
+</div>
+</section>
+<section class="" >
+
+<div style="text-align:center;padding-top:120px">
+    <div style="font-size:3em;color:#BB86FC;font-weight:700;opacity:0.3;margin-bottom:-20px">11</div>
+    <h2 style="border-bottom:3px solid #BB86FC;display:inline-block;padding-bottom:10px">GOT, PLT &amp; Lazy Binding</h2>
+    <p style="color:#CCCCCC;font-size:0.85em;max-width:600px;margin:15px auto 0">The #1 exploit target in ELF</p>
+</div>
+</section>
+<section class="slide-header" >
+
+<h2>.got vs .got.plt</h2>
+<div class="vs-container" style="margin-top:15px">
+    <div class="card" style="border-top:3px solid #FF4444">
+        <h3 style="color:#FF4444;margin-top:0">.got (Data GOT)</h3>
+        <div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Imported variable addresses</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Resolved eagerly (always)</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Protected by RELRO (even partial)</div>
+    </div>
+    <div class="vs-badge">VS</div>
+    <div class="card" style="border-top:3px solid #00FF88">
+        <h3 style="color:#00FF88;margin-top:0">.got.plt (Function GOT)</h3>
+        <div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Imported function pointers</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Lazy binding: first call resolution</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Partial RELRO: WRITABLE (exploit target!)</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Full RELRO: read-only after load</div>
+    </div>
+</div>
+</section>
+<section class="slide-header" >
+<h2>Lazy Binding — First Call Resolution</h2>
+<svg class="svg-animated" viewBox="0 0 1100 200" style="width:100%;max-height:200px;margin:15px 0">
+  <g style="animation-delay:0.0s">
+    <rect x="20" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#00D4FF" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.0s both"/>
+    <text x="85" y="85" text-anchor="middle"
+          fill="#00D4FF" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.1s both">Call puts@plt</text>
+  </g>
+  <line x1="155" y1="80" x2="177" y2="80"
+        stroke="#00D4FF" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.2s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.3s">
+    <rect x="181" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#00FF88" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.3s both"/>
+    <text x="246" y="85" text-anchor="middle"
+          fill="#00FF88" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.4s both">jmp [GOT]→self</text>
+  </g>
+  <line x1="316" y1="80" x2="338" y2="80"
+        stroke="#00FF88" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.5s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.6s">
+    <rect x="342" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#FFD700" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.6s both"/>
+    <text x="407" y="85" text-anchor="middle"
+          fill="#FFD700" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.7s both">push reloc_idx</text>
+  </g>
+  <line x1="477" y1="80" x2="499" y2="80"
+        stroke="#FFD700" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.8s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.8999999999999999s">
+    <rect x="503" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#FF4444" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.8999999999999999s both"/>
+    <text x="568" y="85" text-anchor="middle"
+          fill="#FF4444" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.9999999999999999s both">jmp PLT0</text>
+  </g>
+  <line x1="638" y1="80" x2="660" y2="80"
+        stroke="#FF4444" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 1.0999999999999999s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:1.2s">
+    <rect x="664" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#BB86FC" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 1.2s both"/>
+    <text x="729" y="85" text-anchor="middle"
+          fill="#BB86FC" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 1.3s both">_dl_fixup</text>
+  </g>
+  <line x1="799" y1="80" x2="821" y2="80"
+        stroke="#BB86FC" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 1.4s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:1.5s">
+    <rect x="825" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#FF8C00" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 1.5s both"/>
+    <text x="890" y="85" text-anchor="middle"
+          fill="#FF8C00" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 1.6s both">GOT updated</text>
+  </g>
+  <line x1="960" y1="80" x2="982" y2="80"
+        stroke="#FF8C00" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 1.7s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:1.7999999999999998s">
+    <rect x="986" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#00E5A0" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 1.7999999999999998s both"/>
+    <text x="1051" y="85" text-anchor="middle"
+          fill="#00E5A0" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 1.9s both">→ puts()</text>
+  </g>
+  <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#00D4FF"/>
+  </marker></defs>
+</svg>
+</section>
+<section class="" >
+
+<div style="text-align:center;padding-top:120px">
+    <div style="font-size:3em;color:#BB86FC;font-weight:700;opacity:0.3;margin-bottom:-20px">12</div>
+    <h2 style="border-bottom:3px solid #BB86FC;display:inline-block;padding-bottom:10px">Full RELRO</h2>
+    <p style="color:#CCCCCC;font-size:0.85em;max-width:600px;margin:15px auto 0">Closing the GOT as an exploit target</p>
+</div>
+</section>
+<section class="slide-header" >
+
+<h2>Lazy vs Full RELRO</h2>
+<div class="vs-container" style="margin-top:15px">
+    <div class="card" style="border-top:3px solid #FF4444">
+        <h3 style="color:#FF4444;margin-top:0">Partial RELRO</h3>
+        <div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ .got.plt WRITABLE at runtime</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ GOT overwrite = classic exploit</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Non-deterministic memory image</div>
+    </div>
+    <div class="vs-badge">VS</div>
+    <div class="card" style="border-top:3px solid #00FF88">
+        <h3 style="color:#00FF88;margin-top:0">Full RELRO (-z relro -z now)</h3>
+        <div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ .got.plt READ-ONLY after load</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ GOT overwrite → SIGSEGV</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Deterministic from first instruction</div>
+<div style="font-size:0.7em;padding:5px 0;border-bottom:1px solid #333350">▸ Negligible startup cost</div>
+    </div>
+</div>
+</section>
+<section class="" >
+
+<div style="text-align:center;padding-top:120px">
+    <div style="font-size:3em;color:#BB86FC;font-weight:700;opacity:0.3;margin-bottom:-20px">13</div>
+    <h2 style="border-bottom:3px solid #BB86FC;display:inline-block;padding-bottom:10px">Complete Load Sequence</h2>
+    <p style="color:#CCCCCC;font-size:0.85em;max-width:600px;margin:15px auto 0">execve() → main()</p>
+</div>
+</section>
+<section class="slide-header" >
+<h2>Kernel Phase</h2>
+<svg class="svg-animated" viewBox="0 0 1100 200" style="width:100%;max-height:200px;margin:15px 0">
+  <g style="animation-delay:0.0s">
+    <rect x="20" y="55" width="150" height="50"
+          rx="8" fill="#14142A" stroke="#00D4FF" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.0s both"/>
+    <text x="95" y="85" text-anchor="middle"
+          fill="#00D4FF" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.1s both">execve()</text>
+  </g>
+  <line x1="174" y1="80" x2="196" y2="80"
+        stroke="#00D4FF" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.2s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.3s">
+    <rect x="200" y="55" width="150" height="50"
+          rx="8" fill="#14142A" stroke="#00FF88" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.3s both"/>
+    <text x="275" y="85" text-anchor="middle"
+          fill="#00FF88" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.4s both">Parse ELF</text>
+  </g>
+  <line x1="354" y1="80" x2="376" y2="80"
+        stroke="#00FF88" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.5s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.6s">
+    <rect x="380" y="55" width="150" height="50"
+          rx="8" fill="#14142A" stroke="#FFD700" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.6s both"/>
+    <text x="455" y="85" text-anchor="middle"
+          fill="#FFD700" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.7s both">mmap LOAD</text>
+  </g>
+  <line x1="534" y1="80" x2="556" y2="80"
+        stroke="#FFD700" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.8s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.8999999999999999s">
+    <rect x="560" y="55" width="150" height="50"
+          rx="8" fill="#14142A" stroke="#FF4444" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.8999999999999999s both"/>
+    <text x="635" y="85" text-anchor="middle"
+          fill="#FF4444" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.9999999999999999s both">ASLR</text>
+  </g>
+  <line x1="714" y1="80" x2="736" y2="80"
+        stroke="#FF4444" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 1.0999999999999999s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:1.2s">
+    <rect x="740" y="55" width="150" height="50"
+          rx="8" fill="#14142A" stroke="#BB86FC" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 1.2s both"/>
+    <text x="815" y="85" text-anchor="middle"
+          fill="#BB86FC" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 1.3s both">Load ld.so</text>
+  </g>
+  <line x1="894" y1="80" x2="916" y2="80"
+        stroke="#BB86FC" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 1.4s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:1.5s">
+    <rect x="920" y="55" width="150" height="50"
+          rx="8" fill="#14142A" stroke="#FF8C00" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 1.5s both"/>
+    <text x="995" y="85" text-anchor="middle"
+          fill="#FF8C00" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 1.6s both">auxv</text>
+  </g>
+  <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#00D4FF"/>
+  </marker></defs>
+</svg>
+</section>
+<section class="slide-header" >
+<h2>Dynamic Linker Phase</h2>
+<svg class="svg-animated" viewBox="0 0 1100 200" style="width:100%;max-height:200px;margin:15px 0">
+  <g style="animation-delay:0.0s">
+    <rect x="20" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#00D4FF" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.0s both"/>
+    <text x="85" y="85" text-anchor="middle"
+          fill="#00D4FF" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.1s both">Self-reloc</text>
+  </g>
+  <line x1="155" y1="80" x2="177" y2="80"
+        stroke="#00D4FF" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.2s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.3s">
+    <rect x="181" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#00FF88" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.3s both"/>
+    <text x="246" y="85" text-anchor="middle"
+          fill="#00FF88" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.4s both">Find .dynamic</text>
+  </g>
+  <line x1="316" y1="80" x2="338" y2="80"
+        stroke="#00FF88" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.5s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.6s">
+    <rect x="342" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#FFD700" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.6s both"/>
+    <text x="407" y="85" text-anchor="middle"
+          fill="#FFD700" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.7s both">DT_NEEDED</text>
+  </g>
+  <line x1="477" y1="80" x2="499" y2="80"
+        stroke="#FFD700" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 0.8s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:0.8999999999999999s">
+    <rect x="503" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#FF4444" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 0.8999999999999999s both"/>
+    <text x="568" y="85" text-anchor="middle"
+          fill="#FF4444" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 0.9999999999999999s both">Relocate</text>
+  </g>
+  <line x1="638" y1="80" x2="660" y2="80"
+        stroke="#FF4444" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 1.0999999999999999s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:1.2s">
+    <rect x="664" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#BB86FC" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 1.2s both"/>
+    <text x="729" y="85" text-anchor="middle"
+          fill="#BB86FC" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 1.3s both">RELRO</text>
+  </g>
+  <line x1="799" y1="80" x2="821" y2="80"
+        stroke="#BB86FC" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 1.4s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:1.5s">
+    <rect x="825" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#FF8C00" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 1.5s both"/>
+    <text x="890" y="85" text-anchor="middle"
+          fill="#FF8C00" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 1.6s both">Constructors</text>
+  </g>
+  <line x1="960" y1="80" x2="982" y2="80"
+        stroke="#FF8C00" stroke-width="2" marker-end="url(#arrowhead)"
+        style="animation:drawLine 0.5s ease 1.7s both;stroke-dasharray:30;stroke-dashoffset:30"/>
+  <g style="animation-delay:1.7999999999999998s">
+    <rect x="986" y="55" width="131" height="50"
+          rx="8" fill="#14142A" stroke="#00E5A0" stroke-width="2"
+          style="animation:fadeInUp 0.5s ease 1.7999999999999998s both"/>
+    <text x="1051" y="85" text-anchor="middle"
+          fill="#00E5A0" font-size="11" font-weight="600"
+          style="animation:fadeInUp 0.5s ease 1.9s both">→ main()</text>
+  </g>
+  <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#00D4FF"/>
+  </marker></defs>
+</svg>
+</section>
+<section class="slide-header" >
+<h2>GOT/PLT Detection Opportunities</h2>
+<svg class="svg-animated" viewBox="0 0 900 380" style="width:90%;margin:10px auto;display:block">
+  <circle cx="450" cy="180" r="40" fill="#14142A"
+          stroke="#00D4FF" stroke-width="2" class="glow-element"/>
+  <text x="450" y="184" text-anchor="middle" fill="#00D4FF"
+        font-size="11" font-weight="700">GOT/PLT
+Layer</text>
+  <line x1="450" y1="180" x2="450" y2="40"
+        stroke="#00D4FF" stroke-width="1" stroke-dasharray="5,5"
+        style="animation:drawLine 1s ease 0.0s both"/>
+  <circle cx="450" cy="40" r="30" fill="#14142A"
+          stroke="#00D4FF" stroke-width="1.5"
+          style="animation:fadeInUp 0.5s ease 0.2s both"/>
+  <text x="450" y="44" text-anchor="middle" fill="#00D4FF"
+        font-size="9" font-weight="600"
+        style="animation:fadeInUp 0.5s ease 0.3s both">GOT Integrity</text>
+  <line x1="450" y1="180" x2="571" y2="110"
+        stroke="#00FF88" stroke-width="1" stroke-dasharray="5,5"
+        style="animation:drawLine 1s ease 0.15s both"/>
+  <circle cx="571" cy="110" r="30" fill="#14142A"
+          stroke="#00FF88" stroke-width="1.5"
+          style="animation:fadeInUp 0.5s ease 0.35s both"/>
+  <text x="571" y="114" text-anchor="middle" fill="#00FF88"
+        font-size="9" font-weight="600"
+        style="animation:fadeInUp 0.5s ease 0.44999999999999996s both">PLT Audit</text>
+  <line x1="450" y1="180" x2="571" y2="250"
+        stroke="#FF4444" stroke-width="1" stroke-dasharray="5,5"
+        style="animation:drawLine 1s ease 0.3s both"/>
+  <circle cx="571" cy="250" r="30" fill="#14142A"
+          stroke="#FF4444" stroke-width="1.5"
+          style="animation:fadeInUp 0.5s ease 0.5s both"/>
+  <text x="571" y="254" text-anchor="middle" fill="#FF4444"
+        font-size="9" font-weight="600"
+        style="animation:fadeInUp 0.5s ease 0.6s both">Resolver Check</text>
+  <line x1="450" y1="180" x2="450" y2="320"
+        stroke="#BB86FC" stroke-width="1" stroke-dasharray="5,5"
+        style="animation:drawLine 1s ease 0.44999999999999996s both"/>
+  <circle cx="450" cy="320" r="30" fill="#14142A"
+          stroke="#BB86FC" stroke-width="1.5"
+          style="animation:fadeInUp 0.5s ease 0.6499999999999999s both"/>
+  <text x="450" y="324" text-anchor="middle" fill="#BB86FC"
+        font-size="9" font-weight="600"
+        style="animation:fadeInUp 0.5s ease 0.75s both">link_map Walk</text>
+  <line x1="450" y1="180" x2="329" y2="250"
+        stroke="#FFD700" stroke-width="1" stroke-dasharray="5,5"
+        style="animation:drawLine 1s ease 0.6s both"/>
+  <circle cx="329" cy="250" r="30" fill="#14142A"
+          stroke="#FFD700" stroke-width="1.5"
+          style="animation:fadeInUp 0.5s ease 0.8s both"/>
+  <text x="329" y="254" text-anchor="middle" fill="#FFD700"
+        font-size="9" font-weight="600"
+        style="animation:fadeInUp 0.5s ease 0.8999999999999999s both">Reloc Audit</text>
+  <line x1="450" y1="180" x2="329" y2="110"
+        stroke="#FF8C00" stroke-width="1" stroke-dasharray="5,5"
+        style="animation:drawLine 1s ease 0.75s both"/>
+  <circle cx="329" cy="110" r="30" fill="#14142A"
+          stroke="#FF8C00" stroke-width="1.5"
+          style="animation:fadeInUp 0.5s ease 0.95s both"/>
+  <text x="329" y="114" text-anchor="middle" fill="#FF8C00"
+        font-size="9" font-weight="600"
+        style="animation:fadeInUp 0.5s ease 1.05s both">Static Binary</text>
+</svg>
+</section>
+<section class="slide-header" >
+<h2>Key Takeaways</h2>
+<div class="card card-accent" style="border-left-color:#00D4FF;padding:8px 16px;margin:5px 0;font-size:0.75em">
+    <span style="color:#00D4FF;font-weight:700;margin-right:8px">01</span>Segments are what runs; sections are what linker arranged
+</div>
+<div class="card card-accent" style="border-left-color:#00FF88;padding:8px 16px;margin:5px 0;font-size:0.75em">
+    <span style="color:#00FF88;font-weight:700;margin-right:8px">02</span>AT_SECURE is THE defense for setuid binaries
+</div>
+<div class="card card-accent" style="border-left-color:#FFD700;padding:8px 16px;margin:5px 0;font-size:0.75em">
+    <span style="color:#FFD700;font-weight:700;margin-right:8px">03</span>.got.plt under partial RELRO is writable — classic exploit target
+</div>
+<div class="card card-accent" style="border-left-color:#FF4444;padding:8px 16px;margin:5px 0;font-size:0.75em">
+    <span style="color:#FF4444;font-weight:700;margin-right:8px">04</span>Full RELRO (-z relro -z now) closes GOT attacks
+</div>
+<div class="card card-accent" style="border-left-color:#BB86FC;padding:8px 16px;margin:5px 0;font-size:0.75em">
+    <span style="color:#BB86FC;font-weight:700;margin-right:8px">05</span>GNU .gnu.hash Bloom filter: O(1) for absent symbols
+</div>
+<div class="card card-accent" style="border-left-color:#FF8C00;padding:8px 16px;margin:5px 0;font-size:0.75em">
+    <span style="color:#FF8C00;font-weight:700;margin-right:8px">06</span>Every pipeline: check Full RELRO, PIE, NX, no TEXTREL
+</div>
+
+</section>
+<section class="" >
+
+<div style="text-align:center;padding-top:150px">
+    <h1 style="background:linear-gradient(135deg,#00D4FF,#BB86FC);-webkit-background-clip:text;-webkit-text-fill-color:transparent">End of Part 1</h1>
+    <p style="color:#CCCCCC;font-size:0.8em">Continue to Part 2: ELF Security &amp; Exploitation</p>
+</div>
+</section>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script>
+Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    center: false,
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    plugins: [ RevealHighlight ],
+    highlight: {
+        beforeHighlight: hljs => hljs.configure({ languages: ['c', 'python', 'javascript', 'bash', 'x86asm', 'json', 'yaml'] })
+    }
+});
+
+</script>
+</body>
+</html>

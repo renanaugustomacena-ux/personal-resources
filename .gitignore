@@ -1,0 +1,12 @@
+# Raw assessment folder — shipped only as adami.zip (via Git LFS), never as loose files
+adami/
+
+# IDE / tooling
+.idea/
+.claude/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
