@@ -1,0 +1,232 @@
+Option Explicit
+
+Sub ExcelsiorCompleto()
+    Application.ScreenUpdating = False
+    Application.EnableEvents = False
+    Application.Calculation = xlCalculationManual
+
+    ' === Parte 1: SistemaRiepilogo ===
+    Dim wsRiep As Worksheet
+    Dim lastRowRiep As Long
+
+    Set wsRiep = ActiveWorkbook.Sheets("Riepilogo")
+
+    With wsRiep
+        ' 1. Inserisci una nuova colonna tra U e V
+        .Columns("V").Insert Shift:=xlToRight
+
+        ' 2. Trova la riga con "TOTALE AUTISTI"
+        lastRowRiep = .Cells(.Rows.Count, "A").End(xlUp).Row
+        Do While .Cells(lastRowRiep, "A").Value <> "TOTALE AUTISTI" And lastRowRiep > 1
+            lastRowRiep = lastRowRiep - 1
+        Loop
+
+        ' 3. Copia valori da AA3 fino alla riga di "TOTALE AUTISTI" inclusa
+        .Range("AA3:AA" & lastRowRiep).Copy
+        .Range("V3").PasteSpecial Paste:=xlPasteValues
+        Application.CutCopyMode = False
+
+        ' 4. Scollega celle unite in Z2:AA2 e AE2 (se esistono)
+        On Error Resume Next
+        .Range("Z2:AA2").UnMerge
+        .Range("AE2").UnMerge
+        On Error GoTo 0
+
+        ' 5. Elimina la colonna AA
+        .Columns("AA").Delete
+
+        ' 6. Riunisci celle Z2:AB2 (ex Z2:AA2)
+        .Range("Z2:AB2").Merge
+
+        ' 7. Adatta la larghezza della nuova colonna V
+        .Columns("V").AutoFit
+    End With
+
+    ' === Parte 2: Excelsior ===
+
+    Dim gridcell As Variant
+    Dim dipendente As Long, sector As Long, nfoglio As Long
+    Dim pointer As Long, base As Long
+    Dim wsTemp As Worksheet, wsDest As Worksheet
+    Dim wsName As String
+    Dim rngDest As Range
+
+    gridcell = Array("A", "C", "F", "H", "A", "C", "F", "H")
+
+    nfoglio = 1
+    dipendente = 4
+    sector = 1
+    pointer = 0
+    base = 0
+
+    ' Crea foglio TEMP
+    Set wsTemp = ActiveWorkbook.Sheets.Add(After:=Sheets(Sheets.Count))
+    wsTemp.Name = "Temp"
+    wsTemp.Columns("D:D").ColumnWidth = 12.86
+
+    ' Linea verticale in colonna D
+    With wsTemp.Shapes.AddLine(245.25, 0.75, 245.25, 712.5)
+        .Line.Weight = 1.5
+    End With
+
+    ' Linea orizzontale tratteggiata tra riga 28 e 29
+    With wsTemp.Shapes.AddLine(0, wsTemp.Rows(28).Top + wsTemp.Rows(28).Height, _
+                               wsTemp.Columns("I").Left + wsTemp.Columns("I").Width, wsTemp.Rows(28).Top + wsTemp.Rows(28).Height)
+        .Line.DashStyle = msoLineDash
+        .Line.Weight = 1
+    End With
+
+    ' Intestazioni blocco
+    Dim labels As Variant
+    labels = Array("Base", "Lav.dip.", "L.207/24)", "Ass.Famigliari", "Conguaglio", "arr + arr", "Acconti", "Sanzioni", "Sindacali", "Cessione 1/5", "'730", "Varie", "Ebilog", _
+                   "Tratt. Varie", "Competenze", "TFR", "", "Trasferte", "", "T o t a l e", "", "Note")
+
+    Dim i As Long
+    For i = 0 To UBound(labels)
+        If labels(i) <> "" Then
+            wsTemp.Range("A" & (i + 4)).Value = labels(i)
+        End If
+    Next i
+
+    With wsTemp.Range("A4:A23").Font
+        .Bold = True
+    End With
+
+    ' Copia schema nei 3 blocchi successivi
+    wsTemp.Range("A4:A25").Copy
+    wsTemp.Range("F4").PasteSpecial Paste:=xlPasteAll
+    wsTemp.Range("A32").PasteSpecial Paste:=xlPasteAll
+    wsTemp.Range("F32").PasteSpecial Paste:=xlPasteAll
+    Application.CutCopyMode = False
+
+    ' Crea foglio ADAMI evitando conflitti di nome
+    Dim baseName As String: baseName = "ADAMI"
+    Dim suffix As Long: suffix = 0
+    Dim newSheetName As String: newSheetName = baseName
+
+    Do While SheetExists(newSheetName)
+        suffix = suffix + 1
+        newSheetName = baseName & suffix
+    Loop
+
+    Set wsDest = ActiveWorkbook.Sheets.Add(After:=Sheets(Sheets.Count))
+    On Error Resume Next
+    Do While True
+        wsDest.Name = newSheetName
+        If Err.Number = 0 Then Exit Do
+        Err.Clear
+        suffix = suffix + 1
+        newSheetName = baseName & suffix
+    Loop
+    On Error GoTo 0
+
+    wsDest.Columns("D:D").ColumnWidth = 12.86
+
+    wsTemp.Range("A1:I54").Copy Destination:=wsDest.Range("A1")
+
+    ' Linee decorative anche su ADAMI
+    With wsDest.Shapes.AddLine(245.25, 0.75, 245.25, 712.5)
+        .Line.Weight = 1.5
+    End With
+    With wsDest.Shapes.AddLine(0, wsDest.Rows(28).Top + wsDest.Rows(28).Height, _
+                               wsDest.Columns("I").Left + wsDest.Columns("I").Width, wsDest.Rows(28).Top + wsDest.Rows(28).Height)
+        .Line.DashStyle = msoLineDash
+        .Line.Weight = 1
+    End With
+
+    ' Ciclo principale
+    Do While wsRiep.Range("A" & dipendente).Value <> "TOTALE AUTISTI"
+        wsDest.Range(gridcell(pointer) & base + 2).Value = wsRiep.Range("A" & dipendente).Value
+
+        ' Bordi celle nome dipendente
+        With wsDest.Range(wsDest.Cells(base + 2, ColFromLetter(CStr(gridcell(pointer)))), _
+                          wsDest.Cells(base + 2, ColFromLetter(CStr(gridcell(pointer))) + 2)).Borders
+            .LineStyle = xlContinuous
+            .Weight = xlMedium
+        End With
+
+        ' Formule nel blocco
+        With wsDest
+            .Range(gridcell(pointer + 1) & base + 4).Formula = "=Riepilogo!E" & dipendente & "-Riepilogo!F" & dipendente
+            .Range(gridcell(pointer + 1) & base + 5).Formula = "=Riepilogo!G" & dipendente
+            .Range(gridcell(pointer + 1) & base + 6).Formula = "=Riepilogo!H" & dipendente
+            .Range(gridcell(pointer + 1) & base + 7).Formula = "=Riepilogo!I" & dipendente & "+Riepilogo!J" & dipendente
+            .Range(gridcell(pointer + 1) & base + 8).Formula = "=Riepilogo!K" & dipendente
+            .Range(gridcell(pointer + 1) & base + 9).Formula = "=Riepilogo!M" & dipendente & "+Riepilogo!N" & dipendente
+            .Range(gridcell(pointer + 1) & base + 10).Formula = "=Riepilogo!O" & dipendente
+            .Range(gridcell(pointer + 1) & base + 11).Formula = "=Riepilogo!P" & dipendente
+            .Range(gridcell(pointer + 1) & base + 12).Formula = "=Riepilogo!Q" & dipendente
+            .Range(gridcell(pointer + 1) & base + 13).Formula = "=Riepilogo!R" & dipendente
+            .Range(gridcell(pointer + 1) & base + 14).Formula = "=Riepilogo!S" & dipendente
+            .Range(gridcell(pointer + 1) & base + 15).Formula = "=Riepilogo!T" & dipendente
+            .Range(gridcell(pointer + 1) & base + 16).Formula = "=Riepilogo!U" & dipendente
+            .Range(gridcell(pointer + 1) & base + 17).Formula = "=Riepilogo!W" & dipendente
+            .Range(gridcell(pointer + 1) & base + 18).Formula = "=Riepilogo!X" & dipendente
+            .Range(gridcell(pointer + 1) & base + 19).Formula = "=Riepilogo!Y" & dipendente
+            .Range(gridcell(pointer + 1) & base + 21).Formula = "=Riepilogo!V" & dipendente
+            .Range(gridcell(pointer + 1) & base + 23).Formula = "=Riepilogo!Z" & dipendente
+        End With
+
+        pointer = pointer + 2
+        sector = sector + 1
+        dipendente = dipendente + 1
+
+        If wsRiep.Range("A" & dipendente).Value <> "TOTALE AUTISTI" Then
+            If sector = 3 Then base = base + 28
+            If sector = 5 Then
+                sector = 1
+                pointer = 0
+                base = base + 28
+                wsTemp.Range("A1:I55").Copy Destination:=wsDest.Range("A" & base + 1)
+            End If
+        End If
+    Loop
+
+    ' Impostazioni stampa
+    With wsDest.PageSetup
+        .PrintArea = ""
+        .LeftMargin = Application.InchesToPoints(0.787)
+        .RightMargin = Application.InchesToPoints(0.787)
+        .TopMargin = Application.InchesToPoints(0.984)
+        .BottomMargin = Application.InchesToPoints(1)
+        .HeaderMargin = Application.InchesToPoints(0.512)
+        .FooterMargin = Application.InchesToPoints(0.512)
+        .Orientation = xlPortrait
+        .PaperSize = xlPaperA4
+        .Zoom = 100
+        On Error Resume Next
+        .PrintQuality = 300
+        On Error GoTo 0
+    End With
+
+    wsDest.UsedRange.FormatConditions.Delete
+    Dim lastRow As Long
+    lastRow = wsDest.Cells(wsDest.Rows.Count, "A").End(xlUp).Row
+    wsDest.PageSetup.PrintArea = wsDest.Range("A1:I" & lastRow).Address
+
+    ' Elimina TEMP
+    Application.DisplayAlerts = False
+    wsTemp.Delete
+    Application.DisplayAlerts = True
+
+    ' Ripristina ambiente Excel
+    Application.ScreenUpdating = True
+    Application.EnableEvents = True
+    Application.Calculation = xlCalculationAutomatic
+
+    MsgBox "Tutto fatto!" & vbCrLf & "Riepilogo sistemato e foglio '" & wsDest.Name & "' creato.", vbInformation
+End Sub
+
+Function ColFromLetter(colLetter As String) As Long
+    ColFromLetter = Range(colLetter & "1").Column
+End Function
+
+Function SheetExists(sheetName As String) As Boolean
+    Dim ws As Worksheet
+    On Error Resume Next
+    Set ws = ActiveWorkbook.Sheets(sheetName)
+    SheetExists = Not ws Is Nothing
+    On Error GoTo 0
+End Function
+
+

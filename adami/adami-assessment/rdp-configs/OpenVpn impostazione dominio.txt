@@ -1,0 +1,7 @@
+per account non i dominio va bene il classico
+
+dhcp-option DNS 192.168.1.146
+
+mentre per account in dominio va messo come segue
+
+dhcp-option DNS 192.168.60.2

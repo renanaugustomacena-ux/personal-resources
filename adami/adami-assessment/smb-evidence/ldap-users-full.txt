@@ -1,0 +1,1726 @@
+# extended LDIF
+#
+# LDAPv3
+# base <DC=adamitrasporti,DC=local> with scope subtree
+# filter: (objectClass=user)
+# requesting: sAMAccountName userPrincipalName memberOf description userAccountControl whenCreated lastLogon pwdLastSet 
+#
+
+# Administrator, Users, adamitrasporti.local
+dn: CN=Administrator,CN=Users,DC=adamitrasporti,DC=local
+description: Built-in account for administering the computer/domain
+whenCreated: 20230807120957.0Z
+memberOf: CN=Group Policy Creator Owners,CN=Users,DC=adamitrasporti,DC=local
+memberOf: CN=Domain Admins,CN=Users,DC=adamitrasporti,DC=local
+memberOf: CN=Enterprise Admins,CN=Users,DC=adamitrasporti,DC=local
+memberOf: CN=Schema Admins,CN=Users,DC=adamitrasporti,DC=local
+memberOf: CN=Administrators,CN=Builtin,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244375178741151
+pwdLastSet: 134171079713306018
+sAMAccountName: Administrator
+
+# Guest, Users, adamitrasporti.local
+dn: CN=Guest,CN=Users,DC=adamitrasporti,DC=local
+description: Built-in account for guest access to the computer/domain
+whenCreated: 20230807120957.0Z
+memberOf: CN=Guests,CN=Builtin,DC=adamitrasporti,DC=local
+userAccountControl: 66082
+lastLogon: 0
+pwdLastSet: 0
+sAMAccountName: Guest
+
+# DC01, Domain Controllers, adamitrasporti.local
+dn: CN=DC01,OU=Domain Controllers,DC=adamitrasporti,DC=local
+whenCreated: 20230807121034.0Z
+userAccountControl: 532480
+lastLogon: 134244364323987045
+pwdLastSet: 134227353564792255
+sAMAccountName: DC01$
+
+# krbtgt, Users, adamitrasporti.local
+dn: CN=krbtgt,CN=Users,DC=adamitrasporti,DC=local
+description: Key Distribution Center Service Account
+whenCreated: 20230807121034.0Z
+memberOf: CN=Denied RODC Password Replication Group,CN=Users,DC=adamitrasporti
+ ,DC=local
+userAccountControl: 514
+lastLogon: 0
+pwdLastSet: 133358838349462448
+sAMAccountName: krbtgt
+
+# DC02, Domain Controllers, adamitrasporti.local
+dn: CN=DC02,OU=Domain Controllers,DC=adamitrasporti,DC=local
+whenCreated: 20230807124703.0Z
+userAccountControl: 532480
+lastLogon: 134244437469608915
+pwdLastSet: 134232256387440751
+sAMAccountName: DC02$
+
+# ADCONNECT, Server, adamitrasporti.local
+dn: CN=ADCONNECT,OU=Server,DC=adamitrasporti,DC=local
+whenCreated: 20230807130700.0Z
+userAccountControl: 4096
+lastLogon: 134243216673648112
+pwdLastSet: 134228806251768415
+sAMAccountName: ADCONNECT$
+
+# FILESERVER01, Server, adamitrasporti.local
+dn: CN=FILESERVER01,OU=Server,DC=adamitrasporti,DC=local
+whenCreated: 20230807131743.0Z
+userAccountControl: 4096
+lastLogon: 134244433372978727
+pwdLastSet: 134230512143581092
+sAMAccountName: FILESERVER01$
+
+# SGA, Server, adamitrasporti.local
+dn: CN=SGA,OU=Server,DC=adamitrasporti,DC=local
+whenCreated: 20230807135443.0Z
+userAccountControl: 4096
+lastLogon: 134244434440200387
+pwdLastSet: 134232041875933000
+sAMAccountName: SGA$
+
+# SGA-DB, Server, adamitrasporti.local
+dn: CN=SGA-DB,OU=Server,DC=adamitrasporti,DC=local
+whenCreated: 20230807140340.0Z
+userAccountControl: 4096
+lastLogon: 134244372967756970
+pwdLastSet: 134234291228684120
+sAMAccountName: SGA-DB$
+
+# Cesare Calz\C3\A0, Sima, Admins, adamitrasporti.local
+dn:: Q049Q2VzYXJlIENhbHrDoCxPVT1TaW1hLE9VPUFkbWlucyxEQz1hZGFtaXRyYXNwb3J0aSxEQ
+ z1sb2NhbA==
+description: Utente Admin locale macchine sima per gestione applicativo
+whenCreated: 20230807143404.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=SIMA,OU=Sima,OU=Admins,DC=adamitrasporti,DC=local
+memberOf: CN=Domain Admins,CN=Users,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134225323839639601
+pwdLastSet: 133362160929593873
+sAMAccountName: adm.cesare.calza
+userPrincipalName: adm.cesare.calza@adamitrasporti.local
+
+# RDS-SCB, MGMT, RDS, adamitrasporti.local
+dn: CN=RDS-SCB,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+whenCreated: 20230810094704.0Z
+memberOf: CN=Terminal Server License Servers,CN=Builtin,DC=adamitrasporti,DC=l
+ ocal
+userAccountControl: 4096
+lastLogon: 134244416785267446
+pwdLastSet: 134234081515717634
+sAMAccountName: RDS-SCB$
+
+# RDS-HOST01, SessionHosts, RDS, adamitrasporti.local
+dn: CN=RDS-HOST01,OU=SessionHosts,OU=RDS,DC=adamitrasporti,DC=local
+whenCreated: 20230810100326.0Z
+userAccountControl: 4096
+lastLogon: 134244437986885021
+pwdLastSet: 134230921544452511
+sAMAccountName: RDS-HOST01$
+
+# Stefano Bonomi, Adami, adamitrasporti.local
+dn: CN=Stefano Bonomi,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230819110933.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=M365,OU=Groups,DC=adamitrasporti,DC=local
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134243354468640664
+pwdLastSet: 133589602689694429
+sAMAccountName: stefano.bonomi
+userPrincipalName: stefano.bonomi@adamitrasporti.com
+
+# Stefano Adami, Adami, adamitrasporti.local
+dn: CN=Stefano Adami,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230819111413.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134243010395211726
+pwdLastSet: 134062845210083454
+sAMAccountName: stefano.adami
+userPrincipalName: stefano.adami@adamitrasporti.com
+
+# Massimo Mele, Adami, adamitrasporti.local
+dn: CN=Massimo Mele,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230819111759.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244381001271082
+pwdLastSet: 133767328322926651
+sAMAccountName: massimo.mele
+userPrincipalName: massimo.mele@adamitrasporti.com
+
+# AdamiRemote1, Adami, adamitrasporti.local
+dn: CN=AdamiRemote1,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230819114647.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244435060961330
+pwdLastSet: 133402848651963348
+sAMAccountName: AdamiRemote1
+userPrincipalName: AdamiRemote1@adamitrasporti.local
+
+# Francesca Varalta, Adami, adamitrasporti.local
+dn: CN=Francesca Varalta,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821082652.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66050
+lastLogon: 0
+pwdLastSet: 133401091600352071
+sAMAccountName: francesca.varalta
+userPrincipalName: francesca.varalta@adamitrasporti.com
+
+# Vojkan Sebic, Adami, adamitrasporti.local
+dn: CN=Vojkan Sebic,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821082837.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244167967957936
+pwdLastSet: 134123518000062255
+sAMAccountName: vojkan.sebic
+userPrincipalName: vojkan.sebic@adamitrasporti.com
+
+# Roberta Maistri, Adami, adamitrasporti.local
+dn: CN=Roberta Maistri,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821085711.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66050
+lastLogon: 133878841785864893
+pwdLastSet: 133663923993155056
+sAMAccountName: roberta.maistri
+userPrincipalName: roberta.maistri@adamitrasporti.com
+
+# Paolo Fantoni, Adami, adamitrasporti.local
+dn: CN=Paolo Fantoni,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821085923.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244430367865738
+pwdLastSet: 133680906307138638
+sAMAccountName: paolo.fantoni
+userPrincipalName: paolo.fantoni@adamitrasporti.com
+
+# Francesco Olivieri, Adami, adamitrasporti.local
+dn: CN=Francesco Olivieri,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821090138.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244234308062732
+pwdLastSet: 133668153291280498
+sAMAccountName: francesco.olivieri
+userPrincipalName: francesco.olivieri@adamitrasporti.com
+
+# Monica Bonvicini, Adami, adamitrasporti.local
+dn: CN=Monica Bonvicini,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821090327.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134243566303439387
+pwdLastSet: 133657826746438846
+sAMAccountName: monica.bonvicini
+userPrincipalName: monica.bonvicini@adamitrasporti.com
+
+# Daniela Bellorio, Adami, adamitrasporti.local
+dn: CN=Daniela Bellorio,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821090557.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133401091033477121
+sAMAccountName: daniela.bellorio
+userPrincipalName: daniela.bellorio@adamitrasporti.com
+
+# Andrea Giardini, Adami, adamitrasporti.local
+dn: CN=Andrea Giardini,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821090749.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244238174632761
+pwdLastSet: 133658675651092821
+sAMAccountName: andrea.giardini
+userPrincipalName: andrea.giardini@adamitrasporti.com
+
+# Patrizia Adami, Adami, adamitrasporti.local
+dn: CN=Patrizia Adami,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821091216.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134243684245133828
+pwdLastSet: 133740551422162846
+sAMAccountName: patrizia.adami
+userPrincipalName: patrizia.adami@adamitrasporti.com
+
+# Umberto Pase, Adami, adamitrasporti.local
+dn: CN=Umberto Pase,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821091655.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244215070496997
+pwdLastSet: 134080441651171241
+sAMAccountName: umberto.pase
+userPrincipalName: umberto.pase@adamitrasporti.com
+
+# Giorgio Adami, Adami, adamitrasporti.local
+dn: CN=Giorgio Adami,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821091928.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244211658870920
+pwdLastSet: 134163987150274246
+sAMAccountName: giorgio.adami
+userPrincipalName: giorgio.adami@adamitrasporti.com
+
+# Piergiorgio Zanella, Adami, adamitrasporti.local
+dn: CN=Piergiorgio Zanella,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821092204.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133401092378323315
+sAMAccountName: giorgio.zanella
+userPrincipalName: giorgio.zanella@adamitrasporti.com
+
+# Nicola Bonomi, Adami, adamitrasporti.local
+dn: CN=Nicola Bonomi,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821093658.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134243371728525966
+pwdLastSet: 133834779013282953
+sAMAccountName: nicola.bonomi
+userPrincipalName: nicola.bonomi@adamitrasporti.com
+
+# Michele Bonomi, Adami, adamitrasporti.local
+dn: CN=Michele Bonomi,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821093829.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244230167797691
+pwdLastSet: 133843434879849646
+sAMAccountName: michele.bonomi
+userPrincipalName: michele.bonomi@adamitrasporti.com
+
+# Lorella Zuanazzi, Adami, adamitrasporti.local
+dn: CN=Lorella Zuanazzi,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821094203.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134243660772221721
+pwdLastSet: 133860688244750521
+sAMAccountName: lorella.zuanazzi
+userPrincipalName: lorella.zuanazzi@adamitrasporti.com
+
+# Filippo Adami, Adami, adamitrasporti.local
+dn: CN=Filippo Adami,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821094342.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134243331016323001
+pwdLastSet: 133921190187511663
+sAMAccountName: filippo.adami
+userPrincipalName: filippo.adami@adamitrasporti.com
+
+# Fabrizio Martinelli, Adami, adamitrasporti.local
+dn: CN=Fabrizio Martinelli,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821094529.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66050
+lastLogon: 0
+pwdLastSet: 133401913767210112
+sAMAccountName: fabrizio.martinelli
+userPrincipalName: fabrizio.martinelli@adamitrasporti.com
+
+# Mattia Soprana, Adami, adamitrasporti.local
+dn: CN=Mattia Soprana,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821094705.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244197956093387
+pwdLastSet: 134005884533751690
+sAMAccountName: mattia.soprana
+userPrincipalName: mattia.soprana@adamitrasporti.com
+
+# Alessio Ballarini, Adami, adamitrasporti.local
+dn: CN=Alessio Ballarini,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821094922.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244345921169729
+pwdLastSet: 133840065398130579
+sAMAccountName: alessio.ballarini
+userPrincipalName: alessio.ballarini@adamitrasporti.com
+
+# Vinicio Locatelli, Adami, adamitrasporti.local
+dn: CN=Vinicio Locatelli,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821095111.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134243650131691983
+pwdLastSet: 133867854643938782
+sAMAccountName: vinicio.locatelli
+userPrincipalName: vinicio.locatelli@adamitrasporti.com
+
+# Andrea Franzoia, Adami, adamitrasporti.local
+dn: CN=Andrea Franzoia,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821095304.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133401101341830212
+sAMAccountName: andrea.franzoia
+userPrincipalName: andrea.franzoia@adamitrasporti.com
+
+# Enzo Benetti, Adami, adamitrasporti.local
+dn: CN=Enzo Benetti,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821095426.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244246541275840
+pwdLastSet: 133656986235971702
+sAMAccountName: enzo.benetti
+userPrincipalName: enzo.benetti@adamitrasporti.com
+
+# Andrea Guandalini, Adami, adamitrasporti.local
+dn: CN=Andrea Guandalini,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821095709.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133401109235352100
+sAMAccountName: andrea.guandalini
+userPrincipalName: andrea.guandalini@adamitrasporti.com
+
+# Tea Vejinovic, Adami, adamitrasporti.local
+dn: CN=Tea Vejinovic,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821100225.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=M365,OU=Groups,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134243355561556950
+pwdLastSet: 134000777214688953
+sAMAccountName: tea.vejinovic
+userPrincipalName: tea.vejinovic@adamitrasporti.com
+
+# Anmoldeep Kaur, Adami, adamitrasporti.local
+dn: CN=Anmoldeep Kaur,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821100629.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134243573200029177
+pwdLastSet: 133840072614226594
+sAMAccountName: anmoldeep.kaur
+userPrincipalName: anmoldeep.kaur@adamitrasporti.com
+
+# AdamiRemote2, Adami, adamitrasporti.local
+dn: CN=AdamiRemote2,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821100955.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244226336260948
+pwdLastSet: 133402848470083753
+sAMAccountName: AdamiRemote2
+userPrincipalName: AdamiRemote2@adamitrasporti.local
+
+# AdamiRemote3, Adami, adamitrasporti.local
+dn: CN=AdamiRemote3,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821101255.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 133844511742329598
+pwdLastSet: 133402852694469757
+sAMAccountName: AdamiRemote3
+userPrincipalName: AdamiRemote3@adamitrasporti.local
+
+# AdamiRemote4, Adami, adamitrasporti.local
+dn: CN=AdamiRemote4,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821101400.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244428046343377
+pwdLastSet: 133402853137282699
+sAMAccountName: AdamiRemote4
+userPrincipalName: AdamiRemote4@adamitrasporti.local
+
+# AdamiRemote5, Adami, adamitrasporti.local
+dn: CN=AdamiRemote5,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821101509.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244265086805501
+pwdLastSet: 133402853255724210
+sAMAccountName: AdamiRemote5
+userPrincipalName: AdamiRemote5@adamitrasporti.local
+
+# AdamiRemote6, Adami, adamitrasporti.local
+dn: CN=AdamiRemote6,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821120133.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244359695944830
+pwdLastSet: 133402848194516510
+sAMAccountName: AdamiRemote6
+userPrincipalName: AdamiRemote6@adamitrasporti.local
+
+# AdamiRemote7, Adami, adamitrasporti.local
+dn: CN=AdamiRemote7,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821120324.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134242925622023321
+pwdLastSet: 133402853441190451
+sAMAccountName: AdamiRemote7
+userPrincipalName: AdamiRemote7@adamitrasporti.local
+
+# AdamiRemote8, Adami, adamitrasporti.local
+dn: CN=AdamiRemote8,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821122854.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 133535780566900758
+pwdLastSet: 133402853589001515
+sAMAccountName: AdamiRemote8
+userPrincipalName: AdamiRemote8@adamitrasporti.local
+
+# AdamiRemote9, Adami, adamitrasporti.local
+dn: CN=AdamiRemote9,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821122953.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134087131900724675
+pwdLastSet: 133402853751032680
+sAMAccountName: AdamiRemote9
+userPrincipalName: AdamiRemote9@adamitrasporti.local
+
+# AdamiRemote10, Adami, adamitrasporti.local
+dn: CN=AdamiRemote10,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821123111.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244235453288476
+pwdLastSet: 133415848850861832
+sAMAccountName: AdamiRemote10
+userPrincipalName: AdamiRemote10@adamitrasporti.local
+
+# AdamiRemote11, Adami, adamitrasporti.local
+dn: CN=AdamiRemote11,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821123208.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244388928089933
+pwdLastSet: 133415873276798027
+sAMAccountName: AdamiRemote11
+userPrincipalName: AdamiRemote11@adamitrasporti.local
+
+# AdamiRemote12, Adami, adamitrasporti.local
+dn: CN=AdamiRemote12,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821123259.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134241737734840361
+pwdLastSet: 133402850349469841
+sAMAccountName: AdamiRemote12
+userPrincipalName: AdamiRemote12@adamitrasporti.local
+
+# AdamiRemote14, Adami, adamitrasporti.local
+dn: CN=AdamiRemote14,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821123345.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244315962290813
+pwdLastSet: 133402850509157726
+sAMAccountName: AdamiRemote14
+userPrincipalName: AdamiRemote14@adamitrasporti.local
+
+# AdamiRemote15, Adami, adamitrasporti.local
+dn: CN=AdamiRemote15,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821123438.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 133656142690058472
+pwdLastSet: 133402850658220611
+sAMAccountName: AdamiRemote15
+userPrincipalName: AdamiRemote15@adamitrasporti.local
+
+# AdamiRemote16, Adami, adamitrasporti.local
+dn: CN=AdamiRemote16,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821123523.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133402850798691507
+sAMAccountName: AdamiRemote16
+userPrincipalName: AdamiRemote16@adamitrasporti.local
+
+# AdamiRemote17, Adami, adamitrasporti.local
+dn: CN=AdamiRemote17,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821123615.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134196119797621500
+pwdLastSet: 133402850957125851
+sAMAccountName: AdamiRemote17
+userPrincipalName: AdamiRemote17@adamitrasporti.local
+
+# AdamiRemote18, Adami, adamitrasporti.local
+dn: CN=AdamiRemote18,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821123704.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133402851086345015
+sAMAccountName: AdamiRemote18
+userPrincipalName: AdamiRemote18@adamitrasporti.local
+
+# AdamiRemote19, Adami, adamitrasporti.local
+dn: CN=AdamiRemote19,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821123835.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133402851239782661
+sAMAccountName: AdamiRemote19
+userPrincipalName: AdamiRemote19@adamitrasporti.local
+
+# AdamiRemote20, Adami, adamitrasporti.local
+dn: CN=AdamiRemote20,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821123926.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133402851430720172
+sAMAccountName: AdamiRemote20
+userPrincipalName: AdamiRemote20@adamitrasporti.local
+
+# AdamiRemote21, Adami, adamitrasporti.local
+dn: CN=AdamiRemote21,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821124035.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 133924007466948735
+pwdLastSet: 133543890595116473
+sAMAccountName: AdamiRemote21
+userPrincipalName: AdamiRemote21@adamitrasporti.local
+
+# AdamiRemote22, Adami, adamitrasporti.local
+dn: CN=AdamiRemote22,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821124123.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133402851708375908
+sAMAccountName: AdamiRemote22
+userPrincipalName: AdamiRemote22@adamitrasporti.local
+
+# AdamiRemote23, Adami, adamitrasporti.local
+dn: CN=AdamiRemote23,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821124203.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133402851850094514
+sAMAccountName: AdamiRemote23
+userPrincipalName: AdamiRemote23@adamitrasporti.local
+
+# AdamiRemote24, Adami, adamitrasporti.local
+dn: CN=AdamiRemote24,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821124557.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133402851989782204
+sAMAccountName: AdamiRemote24
+userPrincipalName: AdamiRemote24@adamitrasporti.local
+
+# AdamiRemote25, Adami, adamitrasporti.local
+dn: CN=AdamiRemote25,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821124651.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133402852111345237
+sAMAccountName: AdamiRemote25
+userPrincipalName: AdamiRemote25@adamitrasporti.local
+
+# AdamiRemote26, Adami, adamitrasporti.local
+dn: CN=AdamiRemote26,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821124734.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134128699304514641
+pwdLastSet: 133402852266659997
+sAMAccountName: AdamiRemote26
+userPrincipalName: AdamiRemote26@adamitrasporti.local
+
+# AdamiRemote27, Adami, adamitrasporti.local
+dn: CN=AdamiRemote27,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821124816.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134242539122196781
+pwdLastSet: 133481571979745253
+sAMAccountName: AdamiRemote27
+userPrincipalName: AdamiRemote27@adamitrasporti.local
+
+# AdamiRemote28, Adami, adamitrasporti.local
+dn: CN=AdamiRemote28,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821124859.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134063921241475013
+pwdLastSet: 133402852523220338
+sAMAccountName: AdamiRemote28
+userPrincipalName: AdamiRemote28@adamitrasporti.local
+
+# AdamiRemote31, Adami, adamitrasporti.local
+dn: CN=AdamiRemote31,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821124943.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133402852849157253
+sAMAccountName: AdamiRemote31
+userPrincipalName: AdamiRemote31@adamitrasporti.local
+
+# AdamiRemote32, Adami, adamitrasporti.local
+dn: CN=AdamiRemote32,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230821125035.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244220908087608
+pwdLastSet: 133402852977907497
+sAMAccountName: AdamiRemote32
+userPrincipalName: AdamiRemote32@adamitrasporti.local
+
+# acs test, ServiceAccount, adamitrasporti.local
+dn: CN=acs test,OU=ServiceAccount,DC=adamitrasporti,DC=local
+whenCreated: 20230823121001.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=M365,OU=Groups,DC=adamitrasporti,DC=local
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 512
+lastLogon: 134014654031564271
+pwdLastSet: 133923898075499670
+sAMAccountName: acs.test
+userPrincipalName: acs.test@adamitrasporti.local
+
+# RDS-HOST02, Server, adamitrasporti.local
+dn: CN=RDS-HOST02,OU=Server,DC=adamitrasporti,DC=local
+whenCreated: 20230823144358.0Z
+userAccountControl: 4096
+lastLogon: 134068910945118604
+pwdLastSet: 134058879011038393
+sAMAccountName: RDS-HOST02$
+
+# MSOL_6a6fc6a0da26, Users, adamitrasporti.local
+dn: CN=MSOL_6a6fc6a0da26,CN=Users,DC=adamitrasporti,DC=local
+description: Account created by Microsoft Azure Active Directory Connect with 
+ installation identifier 6a6fc6a0da26457d8fe13db6bd82942f running on computer 
+ ADCONNECT configured to synchronize to tenant adamilog.onmicrosoft.com. This 
+ account must have directory replication permissions in the local Active Direc
+ tory and write permission on certain attributes to enable Hybrid Deployment.
+whenCreated: 20230825092720.0Z
+userAccountControl: 66048
+lastLogon: 134243359364394132
+pwdLastSet: 133374292410215495
+sAMAccountName: MSOL_6a6fc6a0da26
+
+# VM-ACS-TEST, TestGPO, Computer, adamitrasporti.local
+dn: CN=VM-ACS-TEST,OU=TestGPO,OU=Computer,DC=adamitrasporti,DC=local
+whenCreated: 20230918074851.0Z
+userAccountControl: 4096
+lastLogon: 134244385746339860
+pwdLastSet: 134232133210370496
+sAMAccountName: VM-ACS-TEST$
+
+# DESKTOP-6FJM553, Computers, adamitrasporti.local
+dn: CN=DESKTOP-6FJM553,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20230918130435.0Z
+userAccountControl: 4096
+lastLogon: 134239991963959233
+pwdLastSet: 134205387127876044
+sAMAccountName: DESKTOP-6FJM553$
+
+# DESKTOP-U8N981F, Computers, adamitrasporti.local
+dn: CN=DESKTOP-U8N981F,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20230918155342.0Z
+userAccountControl: 4096
+lastLogon: 134244435828566999
+pwdLastSet: 134226072333865266
+sAMAccountName: DESKTOP-U8N981F$
+
+# dejan vucenovic, Adami, adamitrasporti.local
+dn: CN=dejan vucenovic,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230925101345.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66050
+lastLogon: 134196805893386234
+pwdLastSet: 134127833868149020
+sAMAccountName: dejan.vucenovic
+userPrincipalName: dejan.vucenovic@adamitrasporti.com
+
+# officina, Adami, adamitrasporti.local
+dn: CN=officina,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230925102100.0Z
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133401896497209969
+sAMAccountName: officina1
+userPrincipalName: officina1@adamitrasporti.com
+
+# pclavaggio, Adami, adamitrasporti.local
+dn: CN=pclavaggio,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230925102342.0Z
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133401898014712398
+sAMAccountName: lavaggio1
+userPrincipalName: lavaggio1@adamitrasporti.com
+
+# cassa, Adami, adamitrasporti.local
+dn: CN=cassa,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230925102444.0Z
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133402883369782210
+sAMAccountName: cassa
+userPrincipalName: cassa@adamitrasporti.com
+
+# Mario Rossi, ServiceAccount, adamitrasporti.local
+dn: CN=Mario Rossi,OU=ServiceAccount,DC=adamitrasporti,DC=local
+whenCreated: 20230927081138.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134068884816499862
+pwdLastSet: 133402758984956281
+sAMAccountName: mario.rossi
+userPrincipalName: mario.rossi@adamitrasporti.local
+
+# service adami, Adami, adamitrasporti.local
+dn: CN=service adami,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20230930095229.0Z
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133405411496443065
+sAMAccountName: service.adami
+userPrincipalName: service.adami@adamitrasporti.local
+
+# RDS-HOSTMAG01, Computers, adamitrasporti.local
+dn: CN=RDS-HOSTMAG01,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20231018064258.0Z
+memberOf: CN=Terminal Server License Servers,CN=Builtin,DC=adamitrasporti,DC=l
+ ocal
+userAccountControl: 4096
+lastLogon: 134244430894331271
+pwdLastSet: 134237833815890326
+sAMAccountName: RDS-HOSTMAG01$
+
+# rf1, RF, adamitrasporti.local
+dn: CN=rf1,OU=RF,DC=adamitrasporti,DC=local
+whenCreated: 20231018130445.0Z
+memberOf: CN=UtentiRF,OU=RF,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244439258060598
+pwdLastSet: 133447692787704545
+sAMAccountName: rf1
+userPrincipalName: rf1@adamitrasporti.local
+
+# rf9, RF, adamitrasporti.local
+dn: CN=rf9,OU=RF,DC=adamitrasporti,DC=local
+whenCreated: 20231024133846.0Z
+memberOf: CN=UtentiRF,OU=RF,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134242856502233901
+pwdLastSet: 133426283261677507
+sAMAccountName: rf9
+userPrincipalName: rf9@adamitrasporti.local
+
+# AdamiRemote33, Adami, adamitrasporti.local
+dn: CN=AdamiRemote33,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20231025133444.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244399775392253
+pwdLastSet: 133427144850043769
+sAMAccountName: AdamiRemote33
+userPrincipalName: AdamiRemote33@adamitrasporti.local
+
+# AdamiRemote34, Adami, adamitrasporti.local
+dn: CN=AdamiRemote34,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20231025133644.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134241868766631507
+pwdLastSet: 133427146041763061
+sAMAccountName: AdamiRemote34
+userPrincipalName: AdamiRemote34@adamitrasporti.local
+
+# AdamiRemote35, Adami, adamitrasporti.local
+dn: CN=AdamiRemote35,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20231025142018.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244217778227612
+pwdLastSet: 133427172182543788
+sAMAccountName: AdamiRemote35
+userPrincipalName: AdamiRemote35@adamitrasporti.local
+
+# rf6, RF, adamitrasporti.local
+dn: CN=rf6,OU=RF,DC=adamitrasporti,DC=local
+whenCreated: 20231106161131.0Z
+memberOf: CN=UtentiRF,OU=RF,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244414316432966
+pwdLastSet: 133437606919416847
+sAMAccountName: rf6
+userPrincipalName: rf6@adamitrasporti.local
+
+# AdamiRemote36, Adami, adamitrasporti.local
+dn: CN=AdamiRemote36,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20231108110205.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244200847888769
+pwdLastSet: 133439149258207599
+sAMAccountName: AdamiRemote36
+userPrincipalName: AdamiRemote36@adamitrasporti.local
+
+# rf3, RF, adamitrasporti.local
+dn: CN=rf3,OU=RF,DC=adamitrasporti,DC=local
+whenCreated: 20231118072510.0Z
+memberOf: CN=UtentiRF,OU=RF,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244428241842564
+pwdLastSet: 133447659105516229
+sAMAccountName: rf3
+userPrincipalName: rf3@adamitrasporti.local
+
+# xlog1, RF, adamitrasporti.local
+dn: CN=xlog1,OU=RF,DC=adamitrasporti,DC=local
+whenCreated: 20231118083938.0Z
+memberOf: CN=UtentiRF,OU=RF,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134006067053017968
+pwdLastSet: 133447703789577715
+sAMAccountName: xlog1
+userPrincipalName: xlog1@adamitrasporti.local
+
+# xlog2, RF, adamitrasporti.local
+dn: CN=xlog2,OU=RF,DC=adamitrasporti,DC=local
+whenCreated: 20231118092403.0Z
+memberOf: CN=UtentiRF,OU=RF,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 133854610787844858
+pwdLastSet: 133447730431765028
+sAMAccountName: xlog2
+userPrincipalName: xlog2@adamitrasporti.local
+
+# ADMIN Stefano Bonomi, Adamitrasporti, Admins, adamitrasporti.local
+dn: CN=ADMIN Stefano Bonomi,OU=Adamitrasporti,OU=Admins,DC=adamitrasporti,DC=l
+ ocal
+whenCreated: 20240228093720.0Z
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133535866400875946
+sAMAccountName: adm.stefanobonomi
+userPrincipalName: adm.stefanobonomi@adamitrasporti.local
+
+# sara silvestri, Adami, adamitrasporti.local
+dn: CN=sara silvestri,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20240229093215.0Z
+userAccountControl: 66048
+lastLogon: 134244436650356046
+pwdLastSet: 133722581546874984
+sAMAccountName: sara.silvestri
+userPrincipalName: sara.silvestri@adamitrasporti.com
+
+# AdamiRemote37, Adami, adamitrasporti.local
+dn: CN=AdamiRemote37,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20240403101810.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244224524576171
+pwdLastSet: 133566130906314607
+sAMAccountName: AdamiRemote37
+userPrincipalName: AdamiRemote37@adamitrasporti.local
+
+# AdamiRemote38, Adami, adamitrasporti.local
+dn: CN=AdamiRemote38,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20240410130425.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 133783810219483271
+pwdLastSet: 133572278652075617
+sAMAccountName: AdamiRemote38
+userPrincipalName: AdamiRemote38@adamitrasporti.local
+
+# AdamiRemote39, Adami, adamitrasporti.local
+dn: CN=AdamiRemote39,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20240412083358.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134236459958375297
+pwdLastSet: 133573844387607792
+sAMAccountName: AdamiRemote39
+userPrincipalName: AdamiRemote39@adamitrasporti.local
+
+# AdamiRemote40, Adami, adamitrasporti.local
+dn: CN=AdamiRemote40,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20240422135245.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 133920505157287608
+pwdLastSet: 133582675657568430
+sAMAccountName: AdamiRemote40
+userPrincipalName: AdamiRemote40@adamitrasporti.local
+
+# Scanner, Users, adamitrasporti.local
+dn: CN=Scanner,CN=Users,DC=adamitrasporti,DC=local
+whenCreated: 20240717125315.0Z
+userAccountControl: 66048
+lastLogon: 134241725860189057
+pwdLastSet: 133656943959094870
+sAMAccountName: scanner
+userPrincipalName: scanner@adamitrasporti.local
+
+# NOTEBOOK-ENZO, Computers, adamitrasporti.local
+dn: CN=NOTEBOOK-ENZO,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20240717141708.0Z
+userAccountControl: 4096
+lastLogon: 134244273563450955
+pwdLastSet: 134226959954977933
+sAMAccountName: NOTEBOOK-ENZO$
+
+# DESKTOP-OFICSO8, Computers, adamitrasporti.local
+dn: CN=DESKTOP-OFICSO8,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20240718132510.0Z
+userAccountControl: 4096
+lastLogon: 134244418664663019
+pwdLastSet: 134231550045715778
+sAMAccountName: DESKTOP-OFICSO8$
+
+# PC-ROBERTA, Computers, adamitrasporti.local
+dn: CN=PC-ROBERTA,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20240719104335.0Z
+userAccountControl: 4096
+lastLogon: 134244402648004106
+pwdLastSet: 134230403126672588
+sAMAccountName: PC-ROBERTA$
+
+# ANDREAGPC, Computers, adamitrasporti.local
+dn: CN=ANDREAGPC,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20240719131113.0Z
+userAccountControl: 4096
+lastLogon: 134244237921164799
+pwdLastSet: 134243755329800447
+sAMAccountName: ANDREAGPC$
+
+# AdamiRemote41, Adami, adamitrasporti.local
+dn: CN=AdamiRemote41,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20240725102934.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 133739248914050118
+pwdLastSet: 133663769741064422
+sAMAccountName: AdamiRemote41
+userPrincipalName: AdamiRemote41@adamitrasporti.local
+
+# DESKTOP-EQVG3M8, Computers, adamitrasporti.local
+dn: CN=DESKTOP-EQVG3M8,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20240814064338.0Z
+userAccountControl: 4096
+lastLogon: 134244413911194158
+pwdLastSet: 134231366601035163
+sAMAccountName: DESKTOP-EQVG3M8$
+
+# DESKTOP-QO0SIK3, Computers, adamitrasporti.local
+dn: CN=DESKTOP-QO0SIK3,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20240816122524.0Z
+userAccountControl: 4096
+lastLogon: 134244377295709134
+pwdLastSet: 134226953147891413
+sAMAccountName: DESKTOP-QO0SIK3$
+
+# CASSA.ADAMI, Adami, adamitrasporti.local
+dn: CN=CASSA.ADAMI,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20240819123730.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244217522490718
+pwdLastSet: 133685446507145597
+sAMAccountName: cassa.adami
+userPrincipalName: cassa.adami@adamitrasporti.com
+
+# DESKTOP-7LBES4Q, Computers, adamitrasporti.local
+dn: CN=DESKTOP-7LBES4Q,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20240819125219.0Z
+userAccountControl: 4096
+lastLogon: 134244432577626064
+pwdLastSet: 134223480856820781
+sAMAccountName: DESKTOP-7LBES4Q$
+
+# AdamiRemote42, Adami, adamitrasporti.local
+dn: CN=AdamiRemote42,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20240910095902.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134203614203214738
+pwdLastSet: 133704359428086096
+sAMAccountName: AdamiRemote42
+userPrincipalName: AdamiRemote42@adamitrasporti.local
+
+# MULTIDISP, Computers, adamitrasporti.local
+dn: CN=MULTIDISP,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20241002103522.0Z
+userAccountControl: 4096
+lastLogon: 134244233132649063
+pwdLastSet: 134238186322656283
+sAMAccountName: MULTIDISP$
+
+# AdamiRemote43, Adami, adamitrasporti.local
+dn: CN=AdamiRemote43,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20241014084504.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134073444987567519
+pwdLastSet: 133733691042474259
+sAMAccountName: AdamiRemote43
+userPrincipalName: AdamiRemote43@adamitrasporti.local
+
+# PATRIZIAPC, Computers, adamitrasporti.local
+dn: CN=PATRIZIAPC,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20241022094407.0Z
+userAccountControl: 4096
+lastLogon: 134244164597769539
+pwdLastSet: 134219431788037127
+sAMAccountName: PATRIZIAPC$
+
+# filippo morocutti, Adami, adamitrasporti.local
+dn: CN=filippo morocutti,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20241113140301.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244231284334416
+pwdLastSet: 133759801818972591
+sAMAccountName: filippo.morocutti
+userPrincipalName: filippo.morocutti@adamitrasporti.com
+
+# PC-MOROCUTTI, Computers, adamitrasporti.local
+dn: CN=PC-MOROCUTTI,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20241115123936.0Z
+userAccountControl: 4096
+lastLogon: 134244224674251973
+pwdLastSet: 134244233625728899
+sAMAccountName: PC-MOROCUTTI$
+
+# DESKTOP-0VBN84S, Computers, adamitrasporti.local
+dn: CN=DESKTOP-0VBN84S,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20241121143149.0Z
+userAccountControl: 4098
+pwdLastSet: 133766731095982647
+sAMAccountName: DESKTOP-0VBN84S$
+
+# PC-MAX, Computers, adamitrasporti.local
+dn: CN=PC-MAX,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20241121143930.0Z
+userAccountControl: 4096
+lastLogon: 134244374321267147
+pwdLastSet: 134229558265175079
+sAMAccountName: PC-MAX$
+
+# AdamiRemote44, Adami, adamitrasporti.local
+dn: CN=AdamiRemote44,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20241219120958.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134242635040378702
+pwdLastSet: 133790837982314911
+sAMAccountName: AdamiRemote44
+userPrincipalName: AdamiRemote44@adamitrasporti.local
+
+# Tommaso Cordano, Adami, adamitrasporti.local
+dn: CN=Tommaso Cordano,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20250114121325.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134243339897671484
+pwdLastSet: 133862491268380438
+sAMAccountName: tommaso.cordano
+userPrincipalName: tommaso.cordano@adamitrasporti.com
+
+# PC-NICOLA, Computers, adamitrasporti.local
+dn: CN=PC-NICOLA,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250208091552.0Z
+userAccountControl: 4096
+lastLogon: 134163220400175081
+pwdLastSet: 134157013400794007
+sAMAccountName: PC-NICOLA$
+
+# Andrea Morelli, Adami, adamitrasporti.local
+dn: CN=Andrea Morelli,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20250210153703.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244162430958293
+pwdLastSet: 133836754238343304
+sAMAccountName: andrea.morelli
+userPrincipalName: Andrea.Morelli@adamitrasporti.com
+
+# cassa1.adami, Adami, adamitrasporti.local
+dn: CN=cassa1.adami,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20250213120435.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134239910866317995
+pwdLastSet: 133839218758322201
+sAMAccountName: cassa1.adami
+userPrincipalName: cassa1.adami@adamitrasporti.com
+
+# DESKTOP-AF8H7PO, Computers, adamitrasporti.local
+dn: CN=DESKTOP-AF8H7PO,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250213121423.0Z
+userAccountControl: 4096
+lastLogon: 134244217392141009
+pwdLastSet: 134241622984249180
+sAMAccountName: DESKTOP-AF8H7PO$
+
+# PC-ANMOL, Computers, adamitrasporti.local
+dn: CN=PC-ANMOL,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250214121148.0Z
+userAccountControl: 4096
+lastLogon: 134244401408500965
+pwdLastSet: 134223493223028585
+sAMAccountName: PC-ANMOL$
+
+# OPERATIVO6, Computers, adamitrasporti.local
+dn: CN=OPERATIVO6,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250214121728.0Z
+userAccountControl: 4096
+lastLogon: 134088220540391937
+pwdLastSet: 134080942562470728
+sAMAccountName: OPERATIVO6$
+
+# AdamiRemote45, Adami, adamitrasporti.local
+dn: CN=AdamiRemote45,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20250217112824.0Z
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244181608116460
+pwdLastSet: 133842653047791483
+sAMAccountName: AdamiRemote45
+userPrincipalName: AdamiRemote45@adamitrasporti.local
+
+# frenocar tv, Adami, adamitrasporti.local
+dn: CN=frenocar tv,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20250217144537.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134241588262666095
+pwdLastSet: 133881575365125542
+sAMAccountName: frenocartv
+userPrincipalName: frenocartv@adamitrasporti.com
+
+# WIN-DLD9QUOBPDG, Computers, adamitrasporti.local
+dn: CN=WIN-DLD9QUOBPDG,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250217145521.0Z
+userAccountControl: 4096
+lastLogon: 134243604265141596
+pwdLastSet: 134241138205731065
+sAMAccountName: WIN-DLD9QUOBPDG$
+
+# DESKTOP-MICHELE, Computers, adamitrasporti.local
+dn: CN=DESKTOP-MICHELE,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250218114951.0Z
+userAccountControl: 4096
+lastLogon: 134244230135876582
+pwdLastSet: 134229542698665861
+sAMAccountName: DESKTOP-MICHELE$
+
+# Elena Malini, Adami, adamitrasporti.local
+dn: CN=Elena Malini,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20250301071652.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66050
+lastLogon: 133983301362311487
+pwdLastSet: 133852870128779161
+sAMAccountName: elena.malini
+userPrincipalName: elena.malini@adamitrasporti.com
+
+# PCFRANCESCA, Computers, adamitrasporti.local
+dn: CN=PCFRANCESCA,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250301080145.0Z
+userAccountControl: 4096
+lastLogon: 134066327137219224
+pwdLastSet: 134063847578873693
+sAMAccountName: PCFRANCESCA$
+
+# DESKTOP-6SNCPLC, Computers, adamitrasporti.local
+dn: CN=DESKTOP-6SNCPLC,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250305095625.0Z
+userAccountControl: 4096
+lastLogon: 134219512306006797
+pwdLastSet: 134195998116544611
+sAMAccountName: DESKTOP-6SNCPLC$
+
+# LORELLAPC, Computers, adamitrasporti.local
+dn: CN=LORELLAPC,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250310120355.0Z
+userAccountControl: 4096
+lastLogon: 134244236013044085
+pwdLastSet: 134244236018628093
+sAMAccountName: LORELLAPC$
+
+# DESKTOP-5PLSE4C, Computers, adamitrasporti.local
+dn: CN=DESKTOP-5PLSE4C,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250312114220.0Z
+userAccountControl: 4096
+lastLogon: 134150971080095272
+pwdLastSet: 134150964956743333
+sAMAccountName: DESKTOP-5PLSE4C$
+
+# Ferruccio, Adami, adamitrasporti.local
+dn: CN=Ferruccio,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20250313160612.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=M365,OU=Groups,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134231453492140412
+pwdLastSet: 133863555724703972
+sAMAccountName: ferruccio.cerri
+userPrincipalName: ferruccio.cerri@adamitrasporti.com
+
+# PCFERRUCCIO, Computers, adamitrasporti.local
+dn: CN=PCFERRUCCIO,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250314082347.0Z
+userAccountControl: 4096
+lastLogon: 134237641014762848
+pwdLastSet: 134223735222784611
+sAMAccountName: PCFERRUCCIO$
+
+# Guardiania Adami, Adami, adamitrasporti.local
+dn: CN=Guardiania Adami,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20250318152354.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134241514187659791
+pwdLastSet: 133867850346439232
+sAMAccountName: guardiania.adami
+userPrincipalName: guardiania.adami@adamitrasporti.com
+
+# Greta Bozzini, Adami, adamitrasporti.local
+dn: CN=Greta Bozzini,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20250331075954.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 133921188430198904
+pwdLastSet: 133878815943316986
+sAMAccountName: greta.bozzini
+userPrincipalName: greta.bozzini@adamitrasporti.com
+
+# simone severino, Adami, adamitrasporti.local
+dn: CN=simone severino,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20250428090153.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 133903842974819933
+pwdLastSet: 133903045136021500
+sAMAccountName: simone.severino
+userPrincipalName: simone.severino@adamitrasporti.com
+
+# PCSEVERINO, Computers, adamitrasporti.local
+dn: CN=PCSEVERINO,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250429071134.0Z
+userAccountControl: 4096
+lastLogon: 134244432170493262
+pwdLastSet: 134223475571680138
+sAMAccountName: PCSEVERINO$
+
+# Andreea Pal, Adami, adamitrasporti.local
+dn: CN=Andreea Pal,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20250505085605.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134242805783782198
+pwdLastSet: 133909089651333703
+sAMAccountName: andreea.pal
+userPrincipalName: andreea.pal@adamitrasporti.com
+
+# viviana cortesi, Adami, adamitrasporti.local
+dn: CN=viviana cortesi,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20250508120844.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 133911800554022232
+pwdLastSet: 133911797242530204
+sAMAccountName: viviana.cortesi
+userPrincipalName: viviana.cortesi@adamitrasporti.com
+
+# PCFRENOCAR, Computers, adamitrasporti.local
+dn: CN=PCFRENOCAR,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250508121416.0Z
+userAccountControl: 4096
+lastLogon: 134244413774740859
+pwdLastSet: 134238158184612363
+sAMAccountName: PCFRENOCAR$
+
+# THINMAN01, Server, adamitrasporti.local
+dn: CN=THINMAN01,OU=Server,DC=adamitrasporti,DC=local
+whenCreated: 20250513085734.0Z
+userAccountControl: 4096
+lastLogon: 134244433018049757
+pwdLastSet: 134232668882673195
+sAMAccountName: THINMAN01$
+
+# RDS-TERMINAL01, Terminal, Collection, RDS, adamitrasporti.local
+dn: CN=RDS-TERMINAL01,OU=Terminal,OU=Collection,OU=RDS,DC=adamitrasporti,DC=lo
+ cal
+whenCreated: 20250513134006.0Z
+memberOf: CN=M365,OU=Groups,DC=adamitrasporti,DC=local
+userAccountControl: 4096
+lastLogon: 134243805946158076
+pwdLastSet: 134232928395349178
+sAMAccountName: RDS-TERMINAL01$
+
+# VINICIOPC, Computers, adamitrasporti.local
+dn: CN=VINICIOPC,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250515073354.0Z
+userAccountControl: 4096
+lastLogon: 134244240198853809
+pwdLastSet: 134236375395336659
+sAMAccountName: VINICIOPC$
+
+# ThinMan, ServiceAccount, adamitrasporti.local
+dn: CN=ThinMan,OU=ServiceAccount,DC=adamitrasporti,DC=local
+whenCreated: 20250515095233.0Z
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 133917763538117623
+sAMAccountName: thinman
+userPrincipalName: thinman@adamitrasporti.local
+
+# riccardo olivieri, Adami, adamitrasporti.local
+dn: CN=riccardo olivieri,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20250903065748.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66050
+lastLogon: 134105164420260990
+pwdLastSet: 134013562684664403
+sAMAccountName: riccardo.olivieri
+userPrincipalName: riccardo.olivieri@adamitrasporti.com
+
+# massimo prova, Adami, adamitrasporti.local
+dn: CN=massimo prova,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20250912064834.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66050
+lastLogon: 134021337246840051
+pwdLastSet: 134021333148573271
+sAMAccountName: massimo.prova
+userPrincipalName: massimo.prova@adamitrasporti.com
+
+# MASSIMOPROVA, Computers, adamitrasporti.local
+dn: CN=MASSIMOPROVA,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20250912065156.0Z
+userAccountControl: 4096
+lastLogon: 134025719442754284
+pwdLastSet: 134021335161318704
+sAMAccountName: MASSIMOPROVA$
+
+# stage, Adami, adamitrasporti.local
+dn: CN=stage,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20251028101602.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 0
+pwdLastSet: 134069761514087242
+sAMAccountName: stage
+userPrincipalName: stage@adamitrasporti.com
+
+# RDS-TERMINAL02, Terminal, Collection, RDS, adamitrasporti.local
+dn: CN=RDS-TERMINAL02,OU=Terminal,OU=Collection,OU=RDS,DC=adamitrasporti,DC=lo
+ cal
+whenCreated: 20251106084958.0Z
+memberOf: CN=M365,OU=Groups,DC=adamitrasporti,DC=local
+userAccountControl: 4096
+lastLogon: 134244382239957158
+pwdLastSet: 134228206216285613
+sAMAccountName: RDS-TERMINAL02$
+
+# DESKTOP-E3JMI73, Computers, adamitrasporti.local
+dn: CN=DESKTOP-E3JMI73,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20251112160150.0Z
+userAccountControl: 4096
+lastLogon: 134241809902476279
+pwdLastSet: 134239295311658431
+sAMAccountName: DESKTOP-E3JMI73$
+
+# nicole speri, Adami, adamitrasporti.local
+dn: CN=nicole speri,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20251125105217.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244432248677254
+pwdLastSet: 134085415375635890
+sAMAccountName: nicole.speri
+userPrincipalName: nicole.speri@adamitrasporti.com
+
+# paolo robbi, Adami, adamitrasporti.local
+dn: CN=paolo robbi,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20251202110927.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134124324003482506
+pwdLastSet: 134091473672344713
+sAMAccountName: paolo.robbi
+userPrincipalName: paolo.robbi@adamitrasporti.com
+
+# DESKTOP-VD6VMVC, Computers, adamitrasporti.local
+dn: CN=DESKTOP-VD6VMVC,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20251202111703.0Z
+userAccountControl: 4096
+lastLogon: 134092201776829620
+pwdLastSet: 134091478239245993
+sAMAccountName: DESKTOP-VD6VMVC$
+
+# PCROBBI, Computers, adamitrasporti.local
+dn: CN=PCROBBI,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20251203102130.0Z
+userAccountControl: 4096
+lastLogon: 134244208456107005
+pwdLastSet: 134235599722734815
+sAMAccountName: PCROBBI$
+
+# Matteo Brugnoli, Adami, adamitrasporti.local
+dn: CN=Matteo Brugnoli,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20251219083703.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244290254320703
+pwdLastSet: 134106070235949362
+sAMAccountName: matteo.brugnoli
+userPrincipalName: matteo.brugnoli@adamitrasporti.com
+
+# PCMATTEO, Computers, adamitrasporti.local
+dn: CN=PCMATTEO,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20251219092633.0Z
+userAccountControl: 4096
+lastLogon: 134244431497626259
+pwdLastSet: 134239318669654561
+sAMAccountName: PCMATTEO$
+
+# Cristina Adami, Adami, adamitrasporti.local
+dn: CN=Cristina Adami,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20251230094128.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=RDS-SGA-Users,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244236921508753
+pwdLastSet: 134115612887980830
+sAMAccountName: cristina.adami
+userPrincipalName: cristina.adami@adamitrasporti.com
+
+# DESKTOP-F054SH3, Computers, adamitrasporti.local
+dn: CN=DESKTOP-F054SH3,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20251230094509.0Z
+userAccountControl: 4096
+lastLogon: 134244423502540095
+pwdLastSet: 134221654430281368
+sAMAccountName: DESKTOP-F054SH3$
+
+# PCNICOLA, Computers, adamitrasporti.local
+dn: CN=PCNICOLA,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20260219121207.0Z
+userAccountControl: 4096
+lastLogon: 134243366362645982
+pwdLastSet: 134241650123379332
+sAMAccountName: PCNICOLA$
+
+# PCGIORGIO, Computers, adamitrasporti.local
+dn: CN=PCGIORGIO,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20260224125030.0Z
+userAccountControl: 4096
+lastLogon: 134244243610173310
+pwdLastSet: 134243633730095106
+sAMAccountName: PCGIORGIO$
+
+# Elena EL. Lacatus, Adami, adamitrasporti.local
+dn: CN=Elena EL. Lacatus,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20260313134245.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134243573336167237
+pwdLastSet: 134178829653479149
+sAMAccountName: elena.lacatus
+userPrincipalName: elena.lacatus@adamitrasporti.com
+
+# DESKTOP-GRT5MEC, Computers, adamitrasporti.local
+dn: CN=DESKTOP-GRT5MEC,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20260317113520.0Z
+userAccountControl: 4096
+lastLogon: 134244421075536311
+pwdLastSet: 134235604455439405
+sAMAccountName: DESKTOP-GRT5MEC$
+
+# DELLDIGIORGIO, Computers, adamitrasporti.local
+dn: CN=DELLDIGIORGIO,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20260401104555.0Z
+userAccountControl: 4096
+lastLogon: 134237572412610374
+pwdLastSet: 134223543191926157
+sAMAccountName: DELLDIGIORGIO$
+
+# Marco Iavarone, Adami, adamitrasporti.local
+dn: CN=Marco Iavarone,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20260402105221.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66050
+lastLogon: 134219390292001837
+pwdLastSet: 134196007412850867
+sAMAccountName: marco.iavarone
+userPrincipalName: marco.iavarone@adamitrasporti.com
+
+# Nemanja Milovanovic, Adami, adamitrasporti.local
+dn: CN=Nemanja Milovanovic,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20260403085519.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134244216382075453
+pwdLastSet: 134196801199281247
+sAMAccountName: nemanja.milovanovic
+userPrincipalName: nemanja.milovanovic@adamitrasporti.com
+
+# TEA-PC, Computers, adamitrasporti.local
+dn: CN=TEA-PC,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20260417081839.0Z
+userAccountControl: 4096
+lastLogon: 134211631788028168
+pwdLastSet: 134208875199978225
+sAMAccountName: TEA-PC$
+
+# PCMORE-NEMA, Computers, adamitrasporti.local
+dn: CN=PCMORE-NEMA,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20260420092204.0Z
+userAccountControl: 4096
+lastLogon: 134244400928872850
+pwdLastSet: 134244323017480836
+sAMAccountName: PCMORE-NEMA$
+
+# SANJIV.KUMAR, Adami, adamitrasporti.local
+dn: CN=SANJIV.KUMAR,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20260522123537.0Z
+memberOf: CN=RDS-TERMINAL-USERS,OU=MGMT,OU=RDS,DC=adamitrasporti,DC=local
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134241813475478201
+pwdLastSet: 134239269378200243
+sAMAccountName: sanjiv.kumar
+userPrincipalName: sanjiv.kumar@adamitrasporti.com
+
+# riccardo stabellini, Adami, adamitrasporti.local
+dn: CN=riccardo stabellini,OU=Adami,DC=adamitrasporti,DC=local
+whenCreated: 20260526064947.0Z
+memberOf: CN=Accesso RD,DC=adamitrasporti,DC=local
+userAccountControl: 66048
+lastLogon: 134242528381693136
+pwdLastSet: 134242517880047857
+sAMAccountName: riccardo.stabellini
+userPrincipalName: riccardo.stabellini@adamitrasporti.com
+
+# NOTEBOOK-STABEL, Computers, adamitrasporti.local
+dn: CN=NOTEBOOK-STABEL,CN=Computers,DC=adamitrasporti,DC=local
+whenCreated: 20260526070710.0Z
+userAccountControl: 4096
+lastLogon: 134243456341423583
+pwdLastSet: 134242528304661681
+sAMAccountName: NOTEBOOK-STABEL$
+
+# search reference
+ref: ldap://ForestDnsZones.adamitrasporti.local/DC=ForestDnsZones,DC=adamitras
+ porti,DC=local
+
+# search reference
+ref: ldap://DomainDnsZones.adamitrasporti.local/DC=DomainDnsZones,DC=adamitras
+ porti,DC=local
+
+# search reference
+ref: ldap://adamitrasporti.local/CN=Configuration,DC=adamitrasporti,DC=local
+
+# search result
+search: 2
+result: 0 Success
+
+# numResponses: 176
+# numEntries: 172
+# numReferences: 3

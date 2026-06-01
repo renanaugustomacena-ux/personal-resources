@@ -1,0 +1,35 @@
+=== ASSESSMENT STATISTICS 2026-05-28 ===
+
+Networks discovered: 5
+  Guest WiFi:     192.168.192.0/24 (16 hosts)
+  Main LAN:       192.168.1.0/24   (91 hosts)
+  Infrastructure:  192.168.60.0/24  (12+ servers)
+  File Server:    192.168.6.0/x    (unreachable)
+  VPN Tunnel:     10.37.169.0/24
+
+Domain: adamitrasporti.local
+Domain Users: 172
+Domain Computers: 55
+Domain Admins: Administrator, adm.cesare.calza
+
+Credentials found: 55+
+  32 domain RDP accounts (plaintext on open share)
+  1 MySQL credential (simone/wErFvbn$_2)
+  1 surveillance admin (superuser/12Sdght$jkN)
+  1 VPN CA private key (can generate unlimited certs)
+  2 Wi-Fi PSKs
+  1 file server creds (adminada)
+  7 browser credential DBs
+  1 AnyDesk password hash
+  1 VPN client cert (francescav, no p12 password)
+  1 VPN client cert+key (Giuseppe/Bianchi)
+
+Ransomware artifacts: 2
+  Phobos (.eking) — 2022-04-08
+  Locky (.locky) — 2005 timestamp (old backup)
+
+ICS/SCADA exposed (flat LAN, no segmentation):
+  2x Omron PLCs (FINS + EtherNet/IP + FTP)
+  1x Phoenix Contact (Modbus 502 + HMI)
+
+Documents: 21 in docs/adami/

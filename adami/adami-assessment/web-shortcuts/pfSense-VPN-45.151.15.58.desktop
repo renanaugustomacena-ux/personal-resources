@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Link
+Name=pfSense VPN Endpoint (HAProxy)
+URL=http://45.151.15.58/
+Icon=network-vpn
