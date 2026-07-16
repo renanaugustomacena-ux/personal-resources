@@ -1,33 +1,4 @@
----
-corso: "SWE Masterclass"
-fase: "8 — SDLC & Process"
-modulo: "8.5"
-titolo: "Git Branching Strategies"
-versione: "Git 2.47 · GitHub Flow · GitLab Flow · Gitflow (AVH) · Conventional Commits 1.0 · release-please v4"
-livello: "Intermediate-Advanced"
-prerequisiti:
-  - "Solid Git fundamentals (clone, commit, branch, merge, rebase, cherry-pick)"
-  - "Experience with pull/merge request workflows"
-  - "Basic CI/CD pipeline understanding (GitHub Actions or equivalent)"
-  - "Familiarity with semantic versioning (SemVer)"
-obiettivi:
-  - "Evaluate trunk-based, GitHub Flow, GitLab Flow, Gitflow, and Release Train strategies against team size, deploy cadence, and regulatory requirements using a structured decision matrix"
-  - "Configure branch protection rules, CODEOWNERS, and a merge queue for a GitHub repository"
-  - "Implement Conventional Commits with commitlint + husky and generate automated changelogs with release-please"
-  - "Design a branching and CI strategy for a monorepo with affected-only testing using Nx or Turborepo"
-  - "Plan and execute a migration from Gitflow to trunk-based development, including feature-flag infrastructure and DORA metric instrumentation"
-tag: [git, branching, trunk-based, GitHub-Flow, GitLab-Flow, Gitflow, release-train, feature-flags, CODEOWNERS, merge-queue, conventional-commits, DORA-metrics, monorepo]
----
-
 # Module 8.5: Git Branching Strategies
-
-> **After completing this module you will be able to:**
->
-> 1. Select the optimal branching strategy for a given team and product by analyzing deploy frequency, release audience, CI maturity, and regulatory constraints.
-> 2. Implement trunk-based development with feature flags, enforcing short-lived branches (< 1 day) and a serialized merge queue.
-> 3. Configure branch protection, CODEOWNERS, and commit-message enforcement for both single-repo and monorepo setups.
-> 4. Migrate an existing Gitflow repository to trunk-based development in a phased rollout with measurable success criteria.
-> 5. Instrument a delivery pipeline with DORA metrics (deployment frequency, lead time, change failure rate, time to restore) and correlate results with branching strategy changes.
 
 > **Module 08.5** · **Last updated:** 2026-05-22
 
@@ -1079,43 +1050,3 @@ frequency), it's a signal to simplify.
 | **Monorepo** | Single repository containing multiple projects or services |
 | **Affected-only CI** | Running CI checks only for packages/projects impacted by a change |
 | **Branch protection** | Rules preventing direct pushes, requiring reviews and CI checks |
-
----
-
-## Cross-References
-
-| Topic | Module | File |
-|---|---|---|
-| Agile/Scrum/Kanban methodologies that shape sprint-based branching cadences | 8.1 | [01_Methodologies_Agile_Scrum_Kanban.md](01_Methodologies_Agile_Scrum_Kanban.md) |
-| Testing strategies that must pass before merge (CI gates) | 8.2 | [02_Testing_Strategies.md](02_Testing_Strategies.md) |
-| Code review rubrics — PR size, review speed, and merge-queue integration | 8.6 | [06_Code_Review_Rubrics.md](06_Code_Review_Rubrics.md) |
-| ADRs for documenting branching strategy decisions; docs-as-code in repos | 8.4 | [04_Documentation_ADR_C4.md](04_Documentation_ADR_C4.md) |
-| Secure SDLC — branch protection as a supply-chain security control | 8.8 | [08_Secure_SDLC_OWASP_SAMM.md](08_Secure_SDLC_OWASP_SAMM.md) |
-| CI/CD pipelines, GitOps, and deployment automation that branching strategies feed into | — | [../../05_DevOps_Cloud_Native/](../../05_DevOps_Cloud_Native/) |
-
----
-
-## Readings and References
-
-> All URLs verified as accessible on 2026-05-29.
-
-**Official guides and portals:**
-
-- Paul Hammant, *Trunk Based Development* (comprehensive reference site): <https://trunkbaseddevelopment.com/>
-- GitHub Docs, *Understanding the GitHub Flow*: <https://docs.github.com/en/get-started/using-github/github-flow>
-- GitLab Docs, *GitLab Flow*: <https://docs.gitlab.com/ee/topics/gitlab_flow.html>
-- Conventional Commits specification 1.0: <https://www.conventionalcommits.org/en/v1.0.0/>
-- DORA metrics guide (Google Cloud): <https://dora.dev/guides/dora-metrics/>
-
-**Industry articles and reports:**
-
-- LaunchDarkly, *Git Branching Strategies vs. Trunk-Based Development*: <https://launchdarkly.com/blog/git-branching-strategies-vs-trunk-based-development/>
-- CD Foundation, *The DORA 4 Key Metrics Become 5* (2025): <https://cd.foundation/blog/2025/10/16/dora-5-metrics/>
-- GitLab, *DORA Metrics: Software Delivery Performance Guide*: <https://about.gitlab.com/topics/devops/dora-metrics/>
-- Martin Fowler, *Feature Toggles (Feature Flags)*: <https://martinfowler.com/articles/feature-toggles.html>
-
-**Books:**
-
-- Nicole Forsgren, Jez Humble, Gene Kim, *Accelerate: The Science of Lean Software and DevOps* (IT Revolution, 2018).
-- Paul Hammant, *Trunk-Based Development and Branch by Abstraction* (Leanpub): <https://tbd-book.com/>
-- Vincent Driessen, *A Successful Git Branching Model* (2010 blog post — the original Gitflow proposal).

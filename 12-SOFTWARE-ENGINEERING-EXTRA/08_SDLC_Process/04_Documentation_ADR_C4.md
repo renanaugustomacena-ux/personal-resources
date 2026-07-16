@@ -1,33 +1,4 @@
----
-corso: "SWE Masterclass"
-fase: "8 — SDLC & Process"
-modulo: "8.4"
-titolo: "Documentation — Technical Writing, ADRs, C4 Model, Diagrams as Code"
-versione: "OpenAPI 3.1 · AsyncAPI 3.0 · Structurizr DSL 2.x · Mermaid 11 · PlantUML 1.2024 · C4-PlantUML v2"
-livello: "Intermediate-Advanced"
-prerequisiti:
-  - "Basic software development workflow (commits, branches, PRs)"
-  - "Familiarity with at least one programming language and its doc-comment conventions"
-  - "Understanding of system architecture concepts (services, databases, APIs)"
-  - "Exposure to CI/CD pipelines (GitHub Actions or equivalent)"
-obiettivi:
-  - "Write an ADR in MADR format with at least three considered alternatives and measurable decision drivers"
-  - "Produce a C4 Context and Container diagram for an existing system using Structurizr DSL or PlantUML"
-  - "Classify an existing documentation corpus into Diataxis modes and identify mixed-mode pages"
-  - "Configure a docs-as-code CI pipeline with prose linting (Vale), link checking (Lychee), and diagram rendering"
-  - "Design and document a REST API using OpenAPI 3.1, validate it with Redocly CLI, and detect breaking changes with oasdiff"
-tag: [documentation, ADR, C4-model, diagrams-as-code, OpenAPI, AsyncAPI, Diataxis, docs-as-code, technical-writing, Structurizr, PlantUML, Mermaid]
----
-
 # Module 8.4: Documentation — Technical Writing, ADRs, C4 Model, Diagrams as Code
-
-> **After completing this module you will be able to:**
->
-> 1. Write Architecture Decision Records (ADRs) in Nygard and MADR formats, maintaining an immutable decision log with proper supersession chains.
-> 2. Create multi-level C4 architecture diagrams (Context, Container, Component, Deployment) using Structurizr DSL, PlantUML, or Mermaid.
-> 3. Apply the Diataxis framework to organize documentation into tutorials, how-to guides, reference, and explanation — without mixing modes.
-> 4. Build a docs-as-code CI pipeline that enforces prose quality, link integrity, spelling, and diagram rendering on every pull request.
-> 5. Specify REST, event-driven, GraphQL, and gRPC APIs using OpenAPI, AsyncAPI, SDL, and Protobuf — with CI-based linting and breaking-change detection.
 
 > **Module 08.4** · **Last updated:** 2026-05-22
 
@@ -2110,46 +2081,3 @@ What are you documenting?
 | **TTL** | Time To Live — expiry date for documentation pages |
 | **SBOM** | Software Bill of Materials — inventory of software components |
 | **BDD** | Behavior-Driven Development — specs as executable Gherkin scenarios |
-
----
-
-## Cross-References
-
-| Topic | Module | File |
-|---|---|---|
-| Code quality tools that complement docs CI (linters, static analysis) | 8.3 | [03_Code_Quality_Static_Analysis.md](03_Code_Quality_Static_Analysis.md) |
-| Git branching strategies that shape where ADRs and docs live in the repo | 8.5 | [05_Git_Branching_Strategies.md](05_Git_Branching_Strategies.md) |
-| Code review rubrics — PR templates reference docs-as-code standards | 8.6 | [06_Code_Review_Rubrics.md](06_Code_Review_Rubrics.md) |
-| Incident response and postmortems — runbook documentation standards | 8.7 | [07_Incident_Response_Postmortems.md](07_Incident_Response_Postmortems.md) |
-| Architecture patterns (microservices, event-driven) that C4 diagrams model | — | [../../02_Architecture_Design/](../../02_Architecture_Design/) |
-| CI/CD pipelines where docs CI, diagram rendering, and OpenAPI validation run | — | [../../05_DevOps_Cloud_Native/](../../05_DevOps_Cloud_Native/) |
-
----
-
-## Readings and References
-
-> All URLs verified as accessible on 2026-05-29.
-
-**Official specifications and tools:**
-
-- ADR GitHub organization — templates, examples, tooling index: <https://adr.github.io/>
-- C4 model official site (Simon Brown): <https://c4model.com/>
-- Structurizr DSL documentation: <https://docs.structurizr.com/dsl>
-- Diataxis framework (Daniele Procida): <https://diataxis.fr/>
-- OpenAPI Specification 3.1: <https://spec.openapis.org/oas/v3.1.0>
-- AsyncAPI Specification 3.0: <https://www.asyncapi.com/docs/reference/specification/v3.0.0>
-
-**Industry guidance:**
-
-- AWS Architecture Blog, *Master Architecture Decision Records (ADRs): Best Practices*: <https://aws.amazon.com/blogs/architecture/master-architecture-decision-records-adrs-best-practices-for-effective-decision-making/>
-- Microsoft Azure Well-Architected Framework, *Maintain an ADR*: <https://learn.microsoft.com/en-us/azure/well-architected/architect-role/architecture-decision-record>
-- Martin Fowler, *Architecture Decision Record* (bliki): <https://martinfowler.com/bliki/ArchitectureDecisionRecord.html>
-- Google, *Technical Writing Courses*: <https://developers.google.com/tech-writing>
-- Tom Johnson, *I'd Rather Be Writing* — What is Diataxis: <https://idratherbewriting.com/blog/what-is-diataxis-documentation-framework>
-
-**Books:**
-
-- Simon Brown, *The C4 Model: Visualizing Software Architecture* (O'Reilly, 2026 early access).
-- Cyrille Martraire, *Living Documentation* (Addison-Wesley, 2019).
-- Daniele Procida, *Diataxis: A Systematic Approach to Technical Documentation Authoring* (diataxis.fr).
-- Michael Nygard, *Documenting Architecture Decisions* (2011 blog post — the original ADR proposal).

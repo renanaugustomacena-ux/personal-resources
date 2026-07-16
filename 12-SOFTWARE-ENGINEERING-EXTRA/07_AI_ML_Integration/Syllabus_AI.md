@@ -1,41 +1,22 @@
-# Phase 7: AI/ML for Software Engineers — Syllabus
-
-> **Last updated:** 2026-05-29
+# Phase 7: AI/ML for Software Engineers - Syllabus
 
 You don't need to build models, but you need to know how to use them.
 
-## Module 7.1: AI Engineering Patterns
+## Module 7.1: LLM Integration Patterns
+**Goal:** Build apps that "think".
+*   **Prompt Engineering:**
+    *   **Zero-Shot vs Few-Shot:** Giving examples.
+    *   **Chain of Thought (CoT):** Asking the model to "show its work".
+*   **RAG (Retrieval Augmented Generation):**
+    *   **Problem:** LLMs hallucinate and have old data.
+    *   **Solution:** Fetch relevant data from a DB, paste it into the prompt ("Context"), then ask the question.
 
-**Goal:** Build production-grade AI systems with guardrails.
-
-| File | Focus |
-|---|---|
-| [01_AI_Engineering_Patterns.md](01_AI_Engineering_Patterns.md) | Evaluation harnesses, prompt engineering, agent architectures, structured output, guardrails, cost optimization |
-
-*   **Prompt Engineering:** Zero-Shot, Few-Shot, Chain of Thought, ReAct.
-*   **Agent Architectures:** Tool use, planning loops, multi-agent orchestration.
-*   **Evaluation:** Offline evals, LLM-as-judge, human-in-the-loop, regression testing.
-
-## Module 7.2: LLM Integration — RAG & Vector Databases
-
-**Goal:** Ground LLM responses in your data.
-
-| File | Focus |
-|---|---|
-| [02_LLM_Integration_RAG_VectorDB.md](02_LLM_Integration_RAG_VectorDB.md) | RAG pipeline, chunking strategies, HNSW/IVF, reranking, hybrid search, pgvector/Qdrant/Weaviate |
-
-*   **RAG (Retrieval Augmented Generation):** Fetch relevant context → inject into prompt → generate.
-*   **Embeddings:** Text/image → float[] vectors. Cosine similarity vs Euclidean.
-*   **Vector Search:** HNSW (graph-based), IVF (clustering), hybrid (keyword + semantic).
-
-## Module 7.3: MLOps Pipelines
-
-**Goal:** Ship models to production with reproducibility and monitoring.
-
-| File | Focus |
-|---|---|
-| [03_MLOps_Pipelines.md](03_MLOps_Pipelines.md) | Feature stores, model registries, training pipelines, drift detection, A/B testing, Kubeflow/MLflow/Feast |
-
-*   **Feature Engineering:** Feature stores (Feast), offline vs online serving.
-*   **Training Pipelines:** Kubeflow, MLflow, experiment tracking, hyperparameter tuning.
-*   **Model Serving:** vLLM, TensorRT, model monitoring, data/concept drift detection.
+## Module 7.2: Vector Databases & Embeddings
+**Goal:** Semantic Search ("Find documents about *happy* dogs" matches "Joyful puppy").
+*   **Embeddings:** Converting text/images into `float[]` vectors.
+*   **Vector Search Algorithms:**
+    *   **HNSW (Hierarchical Navigable Small World):** Fast approximate search (Graph-based).
+    *   **IVF (Inverted File):** Clustering based.
+*   **Distance Metrics:**
+    *   **Cosine Similarity:** Angle between vectors (Best for text).
+    *   **Euclidean (L2):** Distance between points.

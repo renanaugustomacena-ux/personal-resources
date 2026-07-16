@@ -1,33 +1,4 @@
----
-corso: "SWE Masterclass"
-fase: "8 — SDLC & Process"
-modulo: "08.7"
-titolo: "Incident Response & Postmortems"
-versione: "NIST SP 800-61 Rev. 3 / CSF 2.0"
-livello: "Advanced"
-prerequisiti:
-  - "Production operations and on-call rotation experience"
-  - "Familiarity with monitoring, alerting, and observability stacks"
-  - "Understanding of SLA/SLO/SLI concepts"
-  - "Basic knowledge of change management processes"
-obiettivi:
-  - "Design a severity classification matrix and map it to response SLAs"
-  - "Execute a full incident lifecycle from detection through follow-up"
-  - "Facilitate a blameless postmortem that produces actionable root-cause analysis"
-  - "Build and evaluate incident metrics dashboards (MTTD, MTTR, change failure rate)"
-  - "Plan and run a chaos-engineering game day to validate incident readiness"
-tag: [incident-response, postmortem, on-call, SRE, chaos-engineering, blameless-culture, NIST-800-61, error-budget]
----
-
 # Module 8.7: Incident Response & Postmortems
-
-> **Learning objectives — by the end of this module you will be able to:**
->
-> 1. Design a severity classification matrix and map each level to response SLAs, communication cadence, and escalation paths.
-> 2. Execute a full incident lifecycle — detection, triage, mitigation, resolution, postmortem, and follow-up — using the Incident Commander model.
-> 3. Facilitate a blameless postmortem that produces 5-Whys or Fishbone root-cause analysis with owner-assigned, time-bound action items.
-> 4. Build and evaluate incident metrics dashboards (MTTD, MTTR, change failure rate, recurrence rate) to drive continuous improvement.
-> 5. Plan and run a chaos-engineering game day, measure response readiness, and feed findings back into runbooks and alert tuning.
 
 > **Module 08.7** · **Last updated:** 2026-05-22
 
@@ -1069,34 +1040,3 @@ When budget is exceeded:
 | **Runbook** | Step-by-step operational procedure for common tasks or incidents |
 | **Circuit breaker** | Pattern that prevents cascading failures by stopping retries after threshold |
 | **Feature flag** | Runtime toggle to disable broken features without rollback |
-
----
-
-## Readings and References
-
-| # | Source | URL | Retrieved |
-|---|--------|-----|-----------|
-| 1 | NIST SP 800-61 Rev. 3 — Incident Response Recommendations and Considerations for Cybersecurity Risk Management | https://csrc.nist.gov/pubs/sp/800/61/r3/final | 2026-05-29 |
-| 2 | NIST SP 800-61 Rev. 2 — Computer Security Incident Handling Guide (withdrawn, historical reference) | https://csrc.nist.gov/pubs/sp/800/61/r2/final | 2026-05-29 |
-| 3 | PagerDuty — Incident Response Documentation | https://response.pagerduty.com/ | 2026-05-29 |
-| 4 | PagerDuty — Postmortem Documentation (blameless postmortems, facilitation, culture) | https://postmortems.pagerduty.com/ | 2026-05-29 |
-| 5 | PagerDuty — The Blameless Postmortem | https://postmortems.pagerduty.com/culture/blameless/ | 2026-05-29 |
-| 6 | PagerDuty — Postmortem Process | https://response.pagerduty.com/after/post_mortem_process/ | 2026-05-29 |
-| 7 | NIST Incident Response Framework — SP 800-61 Four Phases Explained | https://ir-os.com/resources/nist-incident-response-framework | 2026-05-29 |
-| 8 | Beyer, Jones, Petoff, Murphy. *Site Reliability Engineering* (O'Reilly, 2016) — chapters 12-14 | — | — |
-| 9 | Nygard. *Release It!* 2nd ed. (Pragmatic Bookshelf, 2018) | — | — |
-| 10 | Dekker. *The Field Guide to Understanding Human Error* 3rd ed. (2014) | — | — |
-| 11 | Rosenthal, Jones. *Chaos Engineering* (O'Reilly, 2020) | — | — |
-
----
-
-## Cross-References
-
-| Module / Folder | Relevance |
-|---|---|
-| [01_Methodologies_Agile_Scrum_Kanban.md](./01_Methodologies_Agile_Scrum_Kanban.md) | Sprint-level incident retrospective integration; Kanban WIP limits during incident follow-up |
-| [02_Testing_Strategies.md](./02_Testing_Strategies.md) | Regression tests created from postmortem action items; chaos-test coverage |
-| [05_Git_Branching_Strategies.md](./05_Git_Branching_Strategies.md) | Hotfix branch workflows triggered by SEV1/SEV2 incidents; rollback procedures |
-| [06_Code_Review_Rubrics.md](./06_Code_Review_Rubrics.md) | Post-incident code-review gates for fixes; review rubrics for postmortem action-item PRs |
-| [08_Secure_SDLC_OWASP_SAMM.md](./08_Secure_SDLC_OWASP_SAMM.md) | SAMM Operations → Incident Management practice; security-incident response alignment |
-| [../04_Security_Cryptography/](../04_Security_Cryptography/) | Cryptographic incident handling (key compromise, certificate revocation); NIST CSF alignment |

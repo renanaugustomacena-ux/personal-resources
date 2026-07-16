@@ -1,33 +1,4 @@
----
-corso: "SWE Masterclass"
-fase: "8 — SDLC & Process"
-modulo: "8.6"
-titolo: "Code Review Rubrics"
-versione: "Danger.js 12 · Reviewdog 0.20 · SonarQube 10 · Semgrep 1.x · Graphite CLI · GitHub Merge Queue"
-livello: "Intermediate-Advanced"
-prerequisiti:
-  - "Experience submitting and reviewing pull requests"
-  - "Familiarity with CI/CD pipelines (GitHub Actions or equivalent)"
-  - "Understanding of common code quality concepts (linting, formatting, test coverage)"
-  - "Basic security awareness (OWASP Top 10 concepts)"
-obiettivi:
-  - "Apply a multi-dimensional review rubric (correctness, security, performance, edge cases, maintainability) consistently across PRs of varying size and domain"
-  - "Configure Danger.js with at least five automated review rules (PR size, missing tests, security-file alerts, console.log detection, changelog enforcement)"
-  - "Measure and improve review-process health using time-to-first-review, time-to-merge, review-iteration count, and review-queue depth metrics"
-  - "Implement a tiered review workflow with domain-specific checklists for database migrations, API endpoints, frontend/UI, infrastructure-as-code, and dependency updates"
-  - "Establish a review culture grounded in Google's engineering practices: approve when code health improves, distinguish blocking from non-blocking feedback, and conduct quarterly review retrospectives"
-tag: [code-review, rubric, PR-template, Danger-js, Reviewdog, SonarQube, stacked-PRs, CODEOWNERS, review-automation, review-culture, review-metrics]
----
-
 # Module 8.6: Code Review Rubrics
-
-> **After completing this module you will be able to:**
->
-> 1. Evaluate a pull request against a structured rubric covering correctness, edge cases, security, performance, error handling, tests, API design, and maintainability — and assign severity levels (CRITICAL / HIGH / MEDIUM / LOW) to each finding.
-> 2. Configure automated review tooling (Danger.js, Reviewdog, coverage enforcement) to eliminate trivial feedback from human reviewers and focus review time on design, logic, and security.
-> 3. Design and enforce PR templates (standard, security-sensitive, database migration) that guide authors to provide the information reviewers need.
-> 4. Break large features into stacked PRs of < 400 lines each, using tools like Graphite or ghstack, to maintain high defect detection rates.
-> 5. Build and sustain a healthy review culture by tracking review-speed metrics, conducting quarterly review retrospectives, and applying Google's "improve overall code health" approval standard.
 
 > **Module 08.6** · **Last updated:** 2026-05-22
 
@@ -1029,44 +1000,3 @@ Review retrospective agenda:
 | **Review queue** | Backlog of PRs awaiting review by a reviewer |
 | **Merge queue** | System that serializes merges, testing each against latest main |
 | **SonarQube** | Platform for code quality analysis and technical debt tracking |
-
----
-
-## Cross-References
-
-| Topic | Module | File |
-|---|---|---|
-| Testing strategies — coverage requirements that reviews must verify | 8.2 | [02_Testing_Strategies.md](02_Testing_Strategies.md) |
-| Static analysis and code quality tools that automate pre-review checks | 8.3 | [03_Code_Quality_Static_Analysis.md](03_Code_Quality_Static_Analysis.md) |
-| ADRs and documentation — PR templates reference docs-as-code standards | 8.4 | [04_Documentation_ADR_C4.md](04_Documentation_ADR_C4.md) |
-| Branching strategies — merge queues, CODEOWNERS, and PR workflows | 8.5 | [05_Git_Branching_Strategies.md](05_Git_Branching_Strategies.md) |
-| Incident response — post-incident reviews share review-culture principles | 8.7 | [07_Incident_Response_Postmortems.md](07_Incident_Response_Postmortems.md) |
-| Architecture decision quality that reviews should validate against system design | — | [../../02_Architecture_Design/](../../02_Architecture_Design/) |
-
----
-
-## Readings and References
-
-> All URLs verified as accessible on 2026-05-29.
-
-**Official engineering practice guides:**
-
-- Google, *Engineering Practices: How to Do a Code Review*: <https://google.github.io/eng-practices/review/reviewer/>
-- Google, *The Standard of Code Review*: <https://google.github.io/eng-practices/review/reviewer/standard.html>
-- Google, *What to Look for in a Code Review*: <https://google.github.io/eng-practices/review/reviewer/looking-for.html>
-- Google, *Speed of Code Reviews*: <https://google.github.io/eng-practices/review/reviewer/speed.html>
-
-**Industry articles and tooling:**
-
-- Swarmia, *A Complete Guide to Code Reviews*: <https://www.swarmia.com/blog/a-complete-guide-to-code-reviews/>
-- Augment Code, *Code Review Best Practices That Actually Scale*: <https://www.augmentcode.com/guides/code-review-best-practices-that-scale>
-- Danger.js documentation: <https://danger.systems/js/>
-- Reviewdog GitHub project: <https://github.com/reviewdog/reviewdog>
-- Graphite (stacked PRs): <https://graphite.dev/>
-
-**Books and extended references:**
-
-- Michaela Greiler, *Code Review Checklist* (michaelagreiler.com).
-- Gunnar Morling, *The Code Review Pyramid*: <https://blog.gunnarmorling.de/2023/01/13/the-code-review-pyramid/>
-- Trisha Gee, *Code Review Best Practices* (JetBrains blog).
-- Nicole Forsgren, Jez Humble, Gene Kim, *Accelerate* (IT Revolution, 2018) — DORA metrics correlating review speed with delivery performance.
