@@ -19,6 +19,7 @@ Le risorse sono organizzate in percorsi di studio ("Power User") progettati per 
 *   [**05. Sviluppo Web**](./05-SVILUPPO-WEB/): Frontend (React, Vue, Svelte) e Backend (Node.js, API Design).
 *   [**11. Godot Engine**](./11-GODOT-ENGINE/): Risorse per lo sviluppo di giochi e applicazioni interattive.
 *   [**12. Software Engineering Extra**](./12-SOFTWARE-ENGINEERING-EXTRA/): Approfondimenti su architettura e metodologie di sviluppo.
+*   [**16. Fortran**](./16-FORTRAN/): Programmazione scientifica, numerics, HPC e modern Fortran per calcolo ad alte prestazioni.
 
 ### ⚙️ DevOps & Automazione
 *   [**06. Gestione Piattaforme**](./06-GESTIONE-PIATTAFORME/): Orchestrazione e gestione di ecosistemi complessi.
