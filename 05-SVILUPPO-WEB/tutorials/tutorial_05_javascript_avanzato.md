@@ -4367,10 +4367,20 @@ function soloLetturaDopoInizializzazione(originale, contesto) {
   }
 }
 
-/** Classe: riceve il costruttore e può restituirne un altro. */
-function sigillata(originale, contesto) {
+/**
+ * Classe: riceve il costruttore e può restituirne un altro.
+ *
+ * Il vincolo generico non è decorativo: senza, il tipo restituito
+ * è una classe anonima e TypeScript rifiuta il decoratore con
+ *   TS1270: Decorator function return type is not assignable
+ * Legando il ritorno a T, il sostituto resta assegnabile all'originale.
+ */
+function sigillata<T extends new (...argomenti: any[]) => object>(
+  originale: T,
+  contesto: ClassDecoratorContext,
+): T {
   return class extends originale {
-    constructor(...argomenti) {
+    constructor(...argomenti: any[]) {
       super(...argomenti)
       Object.seal(this)
     }
