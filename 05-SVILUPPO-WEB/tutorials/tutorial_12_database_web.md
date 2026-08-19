@@ -54,11 +54,8 @@
              ▼
    ┌──────────────────────────────────────────────────────┐
    │  PostgreSQL                                          │
-   │  ┌────────────┐  ┌──────────┐  ┌──────────────────┐  │
-   │  │ query      │→ │ piano di │→ │ esecuzione       │  │
-   │  │ planner    │  │ accesso  │  │ (Seq / Index Scan)│ │
-   │  └────────────┘  └──────────┘  └──────────────────┘  │
-   │        ▲ statistiche (ANALYZE)      ▲ indici          │
+   │   query planner → piano di accesso → esecuzione      │
+   │        ▲ statistiche (ANALYZE)      ▲ indici         │
    │  ┌─────┴──────────────────────────────────────────┐  │
    │  │ VINCOLI: NOT NULL · CHECK · UNIQUE · FOREIGN KEY│ │
    │  │ l'ultima linea di difesa: valgono anche per chi │ │
@@ -665,25 +662,24 @@ COME SI SCOPRE UN N+1 PRIMA CHE LO SCOPRA LA PRODUZIONE
 Il livello di isolamento decide *quali anomalie sono possibili*. PostgreSQL usa `READ COMMITTED` come predefinito, e quasi nessuno lo cambia — spesso senza sapere cosa comporta.
 
 ```
-LE ANOMALIE, E DOVE SI VEDONO
-  DIRTY READ        leggere dati non ancora confermati.
-    PostgreSQL non lo permette a nessun livello.
+LE ANOMALIE
+  DIRTY READ  leggere dati non confermati: PostgreSQL non lo permette
+    a nessun livello.
   NON-REPEATABLE READ  la stessa riga letta due volte nella stessa
     transazione ha valori diversi.  Possibile in READ COMMITTED.
-  PHANTOM READ      la stessa query restituisce righe NUOVE.
-    Possibile in READ COMMITTED.
-  LOST UPDATE       due transazioni leggono, calcolano, scrivono:
-    la seconda cancella il lavoro della prima.  ← il più frequente,
-    e il più silenzioso
+  PHANTOM READ  la stessa query restituisce righe NUOVE.  Idem.
+  LOST UPDATE  due transazioni leggono, calcolano, scrivono: la
+    seconda cancella il lavoro della prima.  ← il più frequente, e
+    il più silenzioso
 
-  READ COMMITTED   (predefinito) ogni comando vede uno snapshot
-    aggiornato. Veloce, e sufficiente per la maggior parte delle
-    letture.
-  REPEATABLE READ  l'intera transazione vede un solo snapshot.
-    Le scritture in conflitto falliscono con l'errore 40001.
-  SERIALIZABLE     come se le transazioni fossero eseguite una
-    dopo l'altra. Il più sicuro, e quello che fallisce di più:
-    richiede che l'applicazione sappia RIPROVARE.
+I LIVELLI
+  READ COMMITTED (predefinito)  ogni comando vede uno snapshot
+    aggiornato: veloce, e sufficiente per la maggior parte delle letture.
+  REPEATABLE READ  l'intera transazione vede un solo snapshot; le
+    scritture in conflitto falliscono con l'errore 40001.
+  SERIALIZABLE  come se le transazioni fossero eseguite una dopo
+    l'altra: il più sicuro, e quello che fallisce di più — richiede
+    che l'applicazione sappia RIPROVARE.
 ```
 
 ```sql
@@ -723,24 +719,20 @@ QUALE SCEGLIERE
 ## B5. Connection pooling
 
 ```
-UNA CONNESSIONE POSTGRESQL È UN PROCESSO DEL SISTEMA OPERATIVO.
-Aprirne una costa millisecondi e alcuni megabyte; tenerne aperte
-cinquecento significa cinquecento processi.
+UNA CONNESSIONE POSTGRESQL È UN PROCESSO DEL SISTEMA OPERATIVO:
+aprirne una costa millisecondi e alcuni megabyte. Il pool le apre una
+volta e le riusa. Il numero giusto NON è "quante ne servono
+all'applicazione": è quante il DATABASE riesce a servire davvero.
+  Punto di partenza: (core del database × 2) + spindle
+  Su una macchina a 8 core con SSD: ~16-20 connessioni TOTALI
 
-Il pool le apre una volta e le riusa. Il numero giusto NON è
-"quante ne servono all'applicazione": è quante il DATABASE riesce a
-servire davvero.
-
-  Punto di partenza:  (core del database × 2) + spindle
-  Su una macchina a 8 core con SSD:  ~16-20 connessioni TOTALI
-
-⚠ TOTALI, non per processo. Quattro istanze dell'applicazione con
-  `connection_limit=20` ciascuna sono ottanta connessioni. Il pool
-  si divide fra le istanze, non si moltiplica.
+⚠ TOTALI, non per processo. Quattro istanze con `connection_limit=20`
+  ciascuna sono ottanta connessioni: il pool si divide fra le
+  istanze, non si moltiplica.
 
 CONTROINTUITIVO MA VERO: oltre il punto di saturazione, aggiungere
-connessioni RALLENTA tutto. Cento query in parallelo su otto core
-si contendono la CPU e i lock; venti alla volta con le altre in coda
+connessioni RALLENTA tutto. Cento query in parallelo su otto core si
+contendono CPU e lock; venti alla volta, con le altre in coda,
 finiscono prima.
 ```
 
@@ -832,19 +824,18 @@ SELECT id FROM prodotti WHERE attributi->>'taglia' = 'M';
 
 ```
 QUANDO JSONB È LA SCELTA GIUSTA
-  ✅ attributi che variano per riga e che nessuno interroga per
-     nome fisso: le specifiche di un prodotto, dove una tastiera ha
+  ✅ attributi che variano per riga e che nessuno interroga per nome
+     fisso: le specifiche di un prodotto, dove una tastiera ha
      "layout" e una sedia ha "portata_kg"
-  ✅ il payload grezzo di un webhook, tenuto per poter rileggere
-     ciò che era arrivato
-  ✅ configurazioni e preferenze utente
+  ✅ il payload grezzo di un webhook, per poter rileggere ciò che
+     era arrivato · configurazioni e preferenze utente
 
 QUANDO NON LO È
-  ❌ dati su cui si fa JOIN, si aggrega o si applicano vincoli.
-     Un CHECK non può guardare dentro un JSONB in modo
-     ragionevole, e una foreign key nemmeno.
-  ❌ campi che tutte le righe hanno. Se il 100% dei prodotti ha
-     `attributi->>'peso'`, quella è una colonna.
+  ❌ dati su cui si fa JOIN, si aggrega o si applicano vincoli: un
+     CHECK non guarda dentro un JSONB in modo ragionevole, e una
+     foreign key nemmeno
+  ❌ campi che tutte le righe hanno: se il 100% dei prodotti ha
+     `attributi->>'peso'`, quella è una colonna
   ❌ come scusa per non decidere lo schema. Il debito si paga al
      primo report che deve aggregare su un campo dentro il JSON.
 ```
@@ -1374,11 +1365,10 @@ LE TRE STRATEGIE DI MULTI-TENANCY
   TABELLA CONDIVISA + tenant_id  la più semplice ed economica; con
     RLS è anche sicura. ⚠ Ogni indice deve avere tenant_id come
     PRIMA colonna, altrimenti ogni query scansiona tutti i clienti.
-  SCHEMA PER TENANT   isolamento più forte, migrazioni moltiplicate
-    per il numero di clienti. Oltre qualche centinaio diventa
-    ingestibile.
-  DATABASE PER TENANT  isolamento massimo e costo massimo. Si
-    giustifica con requisiti di legge o clienti molto grandi.
+  SCHEMA PER TENANT  isolamento più forte, migrazioni moltiplicate
+    per cliente: oltre qualche centinaio diventa ingestibile.
+  DATABASE PER TENANT  isolamento e costo massimi: si giustifica con
+    requisiti di legge o clienti molto grandi.
 ```
 
 ---
@@ -1428,9 +1418,8 @@ sequenze.
 ```sql
 CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
 
--- Le query per TEMPO TOTALE, non per tempo medio: una query da
--- 5 ms eseguita un milione di volte costa più di una da 2 s
--- eseguita dieci volte
+-- Ordinate per TEMPO TOTALE, non per tempo medio: una query da 5 ms
+-- eseguita un milione di volte costa più di una da 2 s eseguita dieci
 SELECT
   round(total_exec_time::numeric / 1000, 1) AS secondi_totali,
   calls,
@@ -1440,22 +1429,19 @@ SELECT
   left(query, 90)                           AS query
 FROM pg_stat_statements
 WHERE query NOT LIKE '%pg_stat_statements%'
-ORDER BY total_exec_time DESC
-LIMIT 20;
+ORDER BY total_exec_time DESC LIMIT 20;
 ```
 
 ```
 COME SI LEGGE
   · `calls` enormemente più alto del numero di richieste servite →
     N+1. È il modo più affidabile di trovarli in produzione.
-  · `stddev` alto con `mean` basso → la query a volte è veloce e a
-    volte no: il planner cambia piano al variare dei parametri,
-    oppure la cache a volte manca.
-  · `righe_per_chiamata` enorme → si trasferisce più del necessario:
-    manca un LIMIT o si stanno selezionando colonne inutili.
-
-⚠ Azzera i contatori dopo un deploy — `SELECT pg_stat_statements_reset();` —
-  altrimenti i numeri mescolano il prima e il dopo e non si capisce
+  · `stddev` alto con `mean` basso → il planner cambia piano al
+    variare dei parametri, oppure la cache a volte manca.
+  · `righe_per_chiamata` enorme → manca un LIMIT, o si stanno
+    selezionando colonne inutili.
+⚠ Azzera i contatori dopo un deploy (`pg_stat_statements_reset()`):
+  altrimenti i numeri mescolano il prima e il dopo, e non si capisce
   se il rilascio ha migliorato o peggiorato.
 ```
 
