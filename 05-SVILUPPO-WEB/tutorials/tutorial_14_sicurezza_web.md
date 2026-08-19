@@ -907,6 +907,8 @@ LE DUE DOMANDE CHE COMPLETANO IL RAGIONAMENTO
 
 ---
 
+## C1. Esercizi progressivi con soluzione
+
 ### Esercizio 1 — Trovare gli XSS in una pagina
 
 **Obiettivo:** individuare tutte le vulnerabilità XSS in questo componente e correggerle.

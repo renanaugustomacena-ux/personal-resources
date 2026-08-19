@@ -908,6 +908,8 @@ it('la risposta rispetta lo schema dichiarato', async () => {
 
 ---
 
+## C1. Esercizi progressivi con soluzione
+
 ### Esercizio 1 — Riscrivere un test che verifica l'implementazione
 
 **Obiettivo:** capire perché questo test non protegge nulla, e riscriverlo.
