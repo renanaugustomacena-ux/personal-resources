@@ -1626,22 +1626,10 @@ RISCHIO
 | Cache first sull'HTML | Gli utenti restano su una versione vecchia per settimane | Network first con timeout e ripiego |
 | Nome della cache senza versione, o nessun `activate` | Le vecchie non vengono mai eliminate e lo spazio cresce | Versione nel nome, pulizia in `activate` |
 | `skipWaiting()` incondizionato | Una pagina aperta riceve asset incompatibili | Solo su conferma dell'utente, poi reload |
-| Nessun banner di aggiornamento | Chi non chiude la scheda resta indietro | `updatefound` + proposta + `controllerchange` |
-| `sw.js` con `max-age` lungo | L'aggiornamento arriva un giorno dopo | `Cache-Control: no-cache` |
 | Intercettare le POST | Una scrittura può ricevere una risposta dalla cache | Solo `method === 'GET'` |
-| Mettere in cache risposte non `ok` | Un 404 servito per sempre | Verificare `ok` e `type === 'basic'` |
 | Cache di risposte autenticate | Il secondo utente del dispositivo vede i dati del primo | Escluderle, o chiave per utente + svuotamento al logout |
-| Logout che rimuove una chiave | Cache, IndexedDB e coda restano | Svuotare tutto, coda compresa |
-| Dati dinamici nel precache | Congelati al momento dell'installazione | Solo asset statici |
 | Coda senza chiave di idempotenza | Un sync ripetuto crea duplicati | `Idempotency-Key` su ogni operazione |
-| 4xx lasciato in coda | Riprovato all'infinito senza mai riuscire | 4xx esce dalla coda, 5xx ci resta |
-| Coda invisibile all'utente | "Ha salvato o no?" | Stato in sospeso mostrato sempre |
 | Permesso notifiche all'avvio | Rifiuto permanente: non si può più chiedere | Al momento utile, con una spiegazione |
-| Notifiche senza `tag` | Si accumulano a decine | `tag` per sostituire |
-| Subscription scadute non rimosse | Invii verso endpoint morti | Eliminare su 404/410 |
-| `navigator.onLine` come verità | Un wifi senza uscita risulta online | Una richiesta di prova con timeout |
-| Sniffing dello user agent | Si falsifica, invecchia, non dice cosa il browser sa fare | Rilevamento della funzionalità |
-| Nessun percorso di disinstallazione | Un service worker rotto non si corregge con un rilascio | Kill switch previsto in anticipo |
 | PWA "perché fa moderno" | Un livello permanente da mantenere, senza beneficio | Manifest + cache degli asset, e basta |
 
 ---

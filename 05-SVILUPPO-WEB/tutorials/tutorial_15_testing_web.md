@@ -1631,25 +1631,6 @@ MISURE E PRODUZIONE
 
 | Anti-pattern | Problema | Soluzione |
 |---|---|---|
-| Test che verifica l'implementazione | Rosso a ogni refactoring, verde con il bug | Verificare il comportamento osservabile |
-| Asserire il valore restituito da un mock | Verifica il mock, non il codice | Mockare il confine esterno, non la logica |
-| `it('funziona')` | In CI il nome è l'unica diagnosi disponibile | Nome che descrive il comportamento atteso |
-| `toThrow()` senza argomenti | Passa per qualunque errore, anche un typo | `toThrow(/messaggio/)` o la classe |
-| Selettori CSS (`.btn-primary`) | Si rompono al primo ritocco del design | `getByRole` con `name` |
-| `getByText('Salva le modifiche')` | Si rompe cambiando la copy | Regex, o il ruolo |
-| `waitForTimeout` | Troppo corto fallisce, troppo lungo rallenta | Attendere l'elemento, la risposta o lo stato |
-| Test dipendenti dall'ordine | Passano insieme, falliscono da soli | Ogni test crea e pulisce i propri dati |
-| Dati casuali senza seme | Fallimenti non riproducibili | Contatore, o seme fisso |
-| Mock del database | Nessun vincolo, nessuna transazione, nessun tipo | Testcontainers |
-| Mock di `fetch` | URL, parsing e gestione errori non verificati | MSW |
-| Dimenticare `resetHandlers` | Un override si porta nel test successivo | `afterEach(() => server.resetHandlers())` |
-| Snapshot di un componente intero | Nessuno legge il diff: si aggiorna e basta | Snapshot inline e mirati |
-| Copertura come obiettivo | Test scritti per coprire righe, non per verificare | Soglia di non regressione; alta solo sul dominio |
-| Retry per far passare un test instabile | Nasconde il problema e insegna a ignorare i rossi | Correggere la causa; segnalare i retry |
-| Disattivare un test per sbloccare la CI | Debito che nessuno ripaga | `fixme` con riferimento e scadenza |
-| E2E per ogni funzionalità | Suite lentissima e fragile | 5-15 percorsi critici |
-| Nessun test per un bug corretto | Il bug torna al terzo rilascio | Il test che riproduce, scritto prima |
-| Testare ciò che il tipo già garantisce | Costo senza rischio coperto | Un tipo scritto meglio |
 
 ---
 
@@ -1675,10 +1656,6 @@ MISURE E PRODUZIONE
 - Causa: macchina più lenta, fusi diversi, dati residui, font mancanti
 - Fix: guardare la traccia; fissare TZ; eliminare le attese arbitrarie
 
-**Playwright non trova un elemento visibile a schermo**
-- Causa: è dentro un iframe o uno shadow DOM, oppure c'è un secondo elemento che combacia
-- Fix: `frameLocator`; restringere con `within`/`filter`; `--debug` per ispezionare
-
 **La suite è diventata lentissima**
 - Causa: troppi E2E, container ricreati a ogni file, nessun parallelismo
 - Fix: spostare le verifiche al livello più basso possibile; container condiviso; `--shard`
@@ -1686,10 +1663,6 @@ MISURE E PRODUZIONE
 **MSW non intercetta**
 - Causa: il server non è avviato, l'URL non combacia (relativo contro assoluto), o il codice usa un client che non passa da `fetch`
 - Fix: `onUnhandledRequest: 'error'` per vedere l'URL reale nel messaggio
-
-**Il rapporto di copertura mostra numeri troppo alti**
-- Causa: manca `all: true`, quindi i file mai importati non sono contati
-- Fix: `all: true` con `include` esplicito
 
 **Un test sul tempo fallisce a fine mese o di notte**
 - Causa: dipende dall'ora reale o dal fuso della macchina

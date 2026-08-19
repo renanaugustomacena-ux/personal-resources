@@ -1641,3 +1641,7 @@ VERSIONAMENTO E CONTRATTO OPERATIVO
 **Strumenti:** [Redocly CLI](https://redocly.com/docs/cli/) per lint e bundle · [openapi-typescript](https://openapi-ts.dev/) per i tipi dal contratto · [Prism](https://stoplight.io/open-source/prism) per il server mock · [Pact](https://docs.pact.io/) per il contract testing
 
 ---
+
+> **Fine del Tutorial 11 — API Design**
+>
+> Prossimo tutorial: `tutorial_12_database_web.md`

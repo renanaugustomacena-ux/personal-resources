@@ -1615,11 +1615,8 @@ DIFESA IN PROFONDITÀ
 | Anti-pattern | Problema | Soluzione |
 |---|---|---|
 | `innerHTML` con dato utente | XSS diretto | `textContent`, o sanificazione con libreria mantenuta |
-| Sanificare l'HTML con una regex | Il parser accetta forme che il filtro non prevede | DOMPurify, o non accettare HTML |
 | URL utente in `href` senza controllo | `javascript:` esegue codice al clic | Validare lo schema con `new URL` |
-| Gestori inline (`onclick="…"`) | Richiedono `'unsafe-inline'` e annullano la CSP | `addEventListener` e `dataset` |
 | `'unsafe-inline'` nella CSP | La policy non protegge da nulla | Nonce per risposta + `strict-dynamic` |
-| CSP messa subito in enforcement | Il sito si rompe, e la reazione è rimuoverla | Report-only, correggere, poi enforcement |
 | Concatenare stringhe in SQL | SQL injection | Query parametrizzate; mappa per le colonne |
 | `exec` con una stringa costruita | Command injection: la più distruttiva | `execFile` con un array di argomenti |
 | Riflettere `Origin` in CORS, o `*` con credenziali | Equivale ad ammettere qualunque sito | Lista chiusa + `credentials: true` |
@@ -1632,9 +1629,6 @@ DIFESA IN PROFONDITÀ
 | Restituire l'oggetto intero | `passwordHash` e simili finiscono nella risposta | `select` esplicito nel livello dati |
 | `data: richiesta.body` | Mass assignment: si scrive `ruolo: "admin"` | Schema Zod `.strict()` |
 | Stack trace in produzione | Espone host, query, struttura interna | Messaggio generico + identificativo richiesta |
-| Azioni CI fissate al tag | Un tag si può spostare su codice diverso | Fissare al commit |
-| `pull_request_target` con codice del fork | Una pull request esterna accede ai segreti | `pull_request` |
-| Spegnere la macchina compromessa | Si perdono la memoria e le prove | Isolare dalla rete, preservare lo stato |
 
 ---
 

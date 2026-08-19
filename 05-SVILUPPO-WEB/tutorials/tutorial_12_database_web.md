@@ -1619,16 +1619,12 @@ PRODUZIONE
 | `ON DELETE CASCADE` ovunque | Cancellare un utente distrugge i suoi documenti contabili | `RESTRICT` dove il dato è storico |
 | Prezzo letto dal prodotto in fattura | Il passato cambia quando cambia il listino | Copiare il valore sulla riga d'ordine |
 | Nessun indice sulle foreign key | Ogni `WHERE fk = …` è una scansione completa | Crearlo esplicitamente: PostgreSQL non lo fa |
-| Un indice per colonna | Costo su ogni scrittura, e il planner li ignora | Indici composti nell'ordine giusto, misurati |
-| `SELECT *` | Si rompe quando arriva una colonna nuova; trasferisce l'inutile | Colonne esplicite |
 | Ciclo che interroga il database | N+1: cento round-trip per una pagina | `select`/`include`, una query per livello |
 | Ottimizzare senza `EXPLAIN` | Si aggiungono indici che non vengono usati | Il piano prima, la modifica dopo |
 | Pool grande "per sicurezza" | Oltre la saturazione le query rallentano tutte | (core × 2), totale fra le istanze |
 | `prisma db push` in produzione, o modificare una migrazione applicata | Nessuna storia né rollback; l'hash non combacia più | `migrate deploy`; una migrazione nuova |
 | `UPDATE` massivo in una transazione | Lock lunghi, WAL enorme, servizio fermo | A lotti, una transazione per lotto |
-| `SET NOT NULL` diretto su tabella grande | Lock esclusivo con scansione completa | `CHECK … NOT VALID` poi `VALIDATE` |
 | `CREATE INDEX` su tabella calda | Blocca le scritture per tutta la durata | `CREATE INDEX CONCURRENTLY` |
-| Cache senza TTL, o trattata come archivio | Diverge dal database; Redis è in memoria | TTL con jitter; il sistema deve reggere la cache vuota |
 | `tenant_id` non primo nell'indice | Ogni query scansiona i dati di tutti i clienti | Prima colonna di ogni indice |
 | Replica scambiata per backup | Replica anche `DROP TABLE`, in pochi secondi | Copie separate, immutabili, ripristinate |
 
