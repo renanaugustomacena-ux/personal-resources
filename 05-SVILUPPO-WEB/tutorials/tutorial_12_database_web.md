@@ -783,28 +783,23 @@ LE TRE FORME NORMALI, IN UNA RIGA CIASCUNA
   2NF  ogni colonna dipende dalla chiave INTERA. In una tabella con
        chiave (ordine_id, prodotto_id), il nome del prodotto non ci
        sta: dipende solo da prodotto_id.
-  3NF  nessuna colonna dipende da un'altra colonna non chiave. Se
-       c'è cap e città, la città dipende dal cap, non dall'ordine.
+  3NF  nessuna colonna dipende da un'altra colonna non chiave. Se ci
+       sono cap e città, la città dipende dal cap, non dall'ordine.
 
 In pratica: OGNI FATTO STA IN UN POSTO SOLO. Se un dato è scritto in
 due tabelle, prima o poi le due divergono — e nessuno sa quale ha
 ragione.
-```
 
-```
 LE TRE DENORMALIZZAZIONI CHE SI RIPAGANO
-
-1. I VALORI STORICI COPIATI (vedi A2). Il prezzo sulla riga
-   d'ordine non è denormalizzazione: è un fatto diverso dal prezzo
-   di listino di oggi.
-
+1. I VALORI STORICI COPIATI (vedi A2). Il prezzo sulla riga d'ordine
+   non è denormalizzazione: è un fatto diverso dal prezzo di listino
+   di oggi.
 2. I CONTATORI AGGREGATI. `prodotti.numero_recensioni` evita un
    count(*) su ogni pagina di catalogo. Il costo è mantenerlo
    allineato — con un trigger, non con il codice applicativo, che
    dimentica il caso in cui la recensione viene cancellata.
-
-3. LE VISTE MATERIALIZZATE per la reportistica. Il report mensile
-   non deve aggregare dieci milioni di righe a ogni apertura.
+3. LE VISTE MATERIALIZZATE per la reportistica: il report mensile non
+   deve aggregare dieci milioni di righe a ogni apertura.
    ⚠ REFRESH MATERIALIZED VIEW blocca le letture; la variante
      CONCURRENTLY no, ma richiede un indice unico sulla vista.
 
@@ -815,7 +810,6 @@ dato sbagliato.
 ```
 
 ---
-
 ## B7. JSONB: quando il relazionale non basta
 
 ```sql
@@ -1396,7 +1390,7 @@ LE TRE STRATEGIE DI MULTI-TENANCY
 // transazioni, i tipi e i piani di esecuzione esistono solo nel
 // database reale: quelli sono i bug che i test devono trovare.
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from '@testcontainers/postgresql'
-import { beforeAll, afterAll, beforeEach } from 'vitest'
+import { beforeAll, afterAll } from 'vitest'
 
 let container: StartedPostgreSqlContainer
 
@@ -1405,12 +1399,6 @@ beforeAll(async () => {
   process.env['DATABASE_URL'] = container.getConnectionUri()
   await eseguiMigrazioni()
 }, 60_000)
-
-// L'isolamento fra test: la transazione annullata è più veloce di
-// TRUNCATE e non tocca le sequenze
-beforeEach(async () => {
-  await prisma.$executeRaw`BEGIN`
-})
 
 afterAll(async () => {
   await container.stop()
@@ -1423,15 +1411,18 @@ COSA VERIFICARE, IN ORDINE DI VALORE
      DEVE fallire. Se passa, il vincolo non esiste davvero.
   2. la CONCORRENZA: venti operazioni parallele sull'ultimo pezzo di
      magazzino. È l'unico modo di provare che la transazione regge.
-  3. le MIGRAZIONI applicate da zero su un database vuoto, a ogni
+  3. le MIGRAZIONI applicate da zero su un database vuoto a ogni
      esecuzione della CI: una migrazione che funziona solo sul
      database di sviluppo non è una migrazione.
   4. il ROLLBACK: la transazione che fallisce a metà non deve
      lasciare righe.
+
+L'ISOLAMENTO FRA TEST: aprire una transazione in `beforeEach` e
+annullarla in `afterEach` è più veloce di TRUNCATE e non tocca le
+sequenze.
 ```
 
 ---
-
 ## D3. pg_stat_statements: trovare le query che costano
 
 ```sql
@@ -1595,25 +1586,21 @@ PRODUZIONE
 
 - [ ] Sai perché i vincoli vanno nel database e non solo nel codice
 - [ ] Scegli fra `ON DELETE CASCADE` e `RESTRICT` con una motivazione
-- [ ] Sai perché `timestamptz` e non `timestamp`, e `bigint` e non `integer`
+- [ ] Sai perché `timestamptz` e non `timestamp`, `bigint` e non `integer`
 - [ ] Modelli un molti-a-molti con la tabella ponte e la chiave composta
 - [ ] Sai perché il prezzo si copia sulla riga d'ordine
 - [ ] Sai in cosa `LEFT JOIN` differisce da `JOIN`, e la trappola del `WHERE`
-- [ ] Sai cosa garantisce ciascuna lettera di ACID
-- [ ] Sai perché una chiamata HTTP non va dentro una transazione
-- [ ] Leggi uno schema Prisma e sai a cosa servono `@map` e `@@map`
-- [ ] Conosci le tre regole delle migrazioni
+- [ ] Sai cosa garantisce ciascuna lettera di ACID, e perché una chiamata HTTP non va dentro una transazione
+- [ ] Leggi uno schema Prisma e conosci le tre regole delle migrazioni
 
 **Parte B — Comprensione**
 
-- [ ] Sai spiegare la regola del prefisso su un indice composto
-- [ ] Sai elencare quattro modi di rendere inutile un indice
+- [ ] Sai spiegare la regola del prefisso su un indice composto, e quattro modi di rendere inutile un indice
 - [ ] Sai quando serve un indice parziale, di copertura, GIN o BRIN
 - [ ] Leggi un `EXPLAIN ANALYZE` e riconosci Seq Scan, stime sbagliate e Buffers
 - [ ] Riconosci un N+1 dal log, e sai correggerlo
 - [ ] Sai cos'è un lost update e conosci due modi di evitarlo
-- [ ] Sai perché aumentare il pool oltre un certo punto rallenta
-- [ ] Sai perché il serverless rompe il pooling e come si risolve
+- [ ] Sai perché aumentare il pool oltre un certo punto rallenta, e perché il serverless rompe il pooling
 - [ ] Sai quando una denormalizzazione si ripaga e chi la mantiene
 - [ ] Sai quando JSONB è la scelta giusta e quando è un debito
 - [ ] Sai eseguire un `SET NOT NULL` su una tabella grande senza fermare il servizio
@@ -1629,15 +1616,13 @@ PRODUZIONE
 
 **Parte D — Esperto**
 
-- [ ] Configuri la RLS con `FORCE` e un ruolo non proprietario
-- [ ] Sai perché `tenant_id` deve essere la prima colonna di ogni indice
+- [ ] Configuri la RLS con `FORCE` e un ruolo non proprietario, e sai perché `tenant_id` va per primo in ogni indice
 - [ ] Testi contro un database reale e verifichi i vincoli
 - [ ] Trovi le query costose con `pg_stat_statements` ordinando per tempo totale
 - [ ] Sai perché il denaro non va in virgola mobile, nel database e in JavaScript
 - [ ] Hai provato un restore, e sai quanto dura
 
 ---
-
 ## Anti-pattern da evitare
 
 | Anti-pattern | Problema | Soluzione |
